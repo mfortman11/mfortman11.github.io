@@ -1,34 +1,66 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Bootstrap 101 Template</title>
-
-    <!-- Bootstrap -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet/less" type="text/css" href="styles.less" />
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
-  </head>
+<html>
   <body>
-  	<div class="jumbotron">
-  		<div class = "header-container">
-  			<h1 style="float-left">Michael Fortman</h1>
-  		</div>
-  	</div>
-    <h1>Hello, world!</h1>
-
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="js/bootstrap.min.js"></script>
-    <script src="less.js" type="text/javascript"></script>
+  <header>
+    <div class="header-content">
+      <h1 class="header-title">Developer Profile: Mike Fortman</h1>
+    </div>
+  </header>
+  <div id="app"></div>
+  <section class="developer-profile__container">
+    <!-- <h3>About Me</h3> -->
+    <div class="developer-profile__info-wrapper">
+      <div class="developer-profile__attributes">
+        <h4>Mike Fortman</h4>
+        <p><strong><span>6-0, 180lb<span> Front-end Engineer</strong></p>
+        <div class="developer-profile__university">
+          <img class="wisco-logo" src="images/Wisconsin_Badgers.svg" width="64" height="64">
+          <p><span>UW-Madison</span><span>Class of 17</span></p>
+          <p><span>Computer Engineering</span><span>& Computer Sciences</span></p>
+        </div>
+        <p class="developer-profile__basic-info">
+          <span>Date of Birth:</span>
+          <span>11/01/1994</span>
+        </p>
+        <p class="developer-profile__basic-info">
+          <span>Hometown:</span>
+          <span>Franklin, WI</span>
+        </p>
+      </div>
+      <div class="developer-profile__stats">
+      </div>
+    </div>
+    <p class="about-me">
+      I am a Front End Engineer experienced in building fast, responsive, and accessible web applications. I have a Full Stack background but have found my passion working on the UI. Currently developing Micro-Front Ends and Web Components in Angular, LitElements, and VanillaJS while exploring my interests with animations.
+    </p>
+    <footer>
+      <h4>Connect: </h4>
+      <div class="follow-me">
+        <a class="linkedin" href="https://www.linkedin.com/in/mikefortman/">
+          <image class="social-icon" src="images/linkedin.svg" width="48" height="48">
+        </a>
+        <a class="github" href="https://github.com/mfortman11">
+          <image class="social-icon" src="images/github.svg" width="48" height="48">
+        </a>
+        <a class="codepen" href="https://codepen.io/mfortman11">
+          <image class="social-icon" src="images/codepen.svg" width="48" height="48">
+        </a>
+        <a class="instagram" href="https://www.instagram.com/mike.fortman/">
+          <image class="social-icon" src="images/instagram.svg" width="48" height="48">
+        </a>
+        <a class="twitter" href="https://twitter.com/michaelfortman">
+          <image class="social-icon" src="images/twitter.svg" width="48" height="48">
+        </a>
+        <a class="twitter" href="https://www.facebook.com/michael.fortman.336/">
+          <image class="social-icon" src="images/facebook.svg" width="48" height="48">
+        </a>
+        <a class="reddit" href="">
+          <image class="social-icon" src="images/reddit.svg" width="48" height="48">
+        </a>
+      </div>
+    </footer>
+  </section>
+  <!-- <footer>
+    <div class="footer-content"></div>
+  </footer> -->
   </body>
 </html>
