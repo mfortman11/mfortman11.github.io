@@ -1,6 +1,5 @@
-// Import stylesheets
-import './style.scss';
-import * as d3 from "d3";
+
+//import * as d3 from "d3";
 
 let svg = d3.select(".developer-profile__stats").append("svg")
     .attr("width", 450)

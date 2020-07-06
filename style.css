@@ -1,0 +1,112 @@
+:root {
+  --header-footer-color: #242424;
+  --background-color: #f4f4f4;
+  --card-background: #8f8f8f;
+
+  --max-card-width: 1200px;
+  --header-height: 30vh;
+  --footer-height: 10vh;
+}
+
+body {
+  background: var(--header-footer-color);
+  margin: 0;
+  font-family: "Courier New", Courier, monospace;
+  color: var(--background-color);
+}
+
+header {
+  height: var(--header-height);
+  background: linear-gradient(90deg,#4592cc, #43adb5, #4592cc);
+  padding-bottom: 16px;
+}
+
+.header-content {
+  height: 100%;
+  background-color: var(--header-footer-color);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  border-top-right-radius: calc(var(--header-height) / 2);
+  border-bottom-left-radius: calc(var(--header-height) / 2);
+}
+
+.header-title {
+  color: white;
+  text-align: center;
+  vertical-align: middle;
+  margin: auto;
+}
+
+/* // footer {
+//   height: $footer-height;
+//   background: linear-gradient(90deg,#4592cc, #43adb5, #4592cc);
+//   padding-top: 8px;
+
+//   .footer-content {
+//     height: 100%;
+//     background: $header-footer-color;
+//   }
+// } */
+
+.developer-profile__container {
+  max-width: var(--max-card-width);
+  margin: 16px auto;
+  padding: 32px;
+  border-radius: 12px;
+  background: var(--card-background);
+}
+
+.developer-profile__info-wrapper {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.developer-profile__attributes {
+  padding:8px;
+  min-width: 300px; 
+}
+
+.developer-profile__attributes p {
+  margin: 0;
+}
+
+.developer-profile__stats {
+  background: white;
+  border: 2px solid black;
+  border-radius: 12px;
+  min-width: 400px;
+}
+
+.developer-profile__university {
+  display: flex;
+}
+
+.developer-profile__university p {
+  display: flex;
+  flex-direction: column;
+  margin-left: 16px;
+}
+
+.developer-profile__basic-info {
+  display: flex;
+  justify-content: space-between;
+}
+
+.developer-profile__basic-info :first-child {
+  font-weight: bold;
+}
+
+footer {
+  display: flex;
+  justify-content: center;
+}
+
+footer a {
+  margin: 8px
+}
+
+.about-me {
+  padding: 0 16px;
+}
