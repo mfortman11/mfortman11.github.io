@@ -5,5 +5,8 @@
   "dependencies": {
     "d3": "^5.16.0",
     "sass": "^1.26.8"
+  },
+  "devDependencies": {
+    "http-server": "^0.12.3"
   }
 }
