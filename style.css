@@ -2,6 +2,9 @@
   --header-footer-color: #242424;
   --background-color: #f4f4f4;
   --card-background: #8f8f8f;
+  --gradient-color-1: #4592cc;
+  --gradient-color-2: #43adb5;
+  --gradient-color-3: #4592cc;
 
   --max-card-width: 1200px;
   --header-height: 30vh;
@@ -17,7 +20,7 @@ body {
 
 header {
   height: var(--header-height);
-  background: linear-gradient(90deg,#4592cc, #43adb5, #4592cc);
+  background: linear-gradient(90deg, var(--gradient-color-1), var(--gradient-color-2), var(--gradient-color-3));
   padding-bottom: 16px;
 }
 
@@ -52,19 +55,21 @@ header {
 
 .developer-profile__container {
   max-width: var(--max-card-width);
-  margin: 16px auto;
+  margin: 48px auto;
   padding: 32px;
+  border: 4px solid var(--gradient-color-1);
   border-radius: 12px;
   background: var(--card-background);
 }
 
 .developer-profile__info-wrapper {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
+  flex-wrap: wrap;
 }
 
 .developer-profile__attributes {
-  padding:8px;
+  padding: 8px;
   min-width: 300px; 
 }
 
@@ -77,6 +82,7 @@ header {
   border: 2px solid black;
   border-radius: 12px;
   min-width: 400px;
+  min-height: 400px;
 }
 
 .developer-profile__university {
@@ -104,7 +110,21 @@ footer {
 }
 
 footer a {
-  margin: 8px
+  color: inherit;
+  text-decoration: none;
+}
+
+.icon-wrapper {
+  display: inline-block;
+  background: white;
+  border: 2px solid var(--gradient-color-1);
+  border-radius: 8px;
+  padding: 4px;
+  margin: 8px;
+}
+
+.icon-wrapper:hover {
+  background: var(--gradient-color-1);
 }
 
 .about-me {
