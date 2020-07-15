@@ -1,6 +1,7 @@
 :root {
   --header-footer-color: #242424;
   --background-color: #f4f4f4;
+  --box-shadow-color: #aeb5bb;
   --card-background: #8f8f8f;
   --gradient-color-1: #4592cc;
   --gradient-color-2: #43adb5;
@@ -12,10 +13,11 @@
 }
 
 body {
-  background: var(--header-footer-color);
+  background: var(--background-color);
   margin: 0;
   font-family: "Courier New", Courier, monospace;
-  color: var(--background-color);
+  /* color: var(--background-color); */
+  font-weight: 600;
 }
 
 header {
@@ -31,8 +33,8 @@ header {
   flex-direction: column;
   justify-content: center;
 
-  border-top-right-radius: calc(var(--header-height) / 2);
-  border-bottom-left-radius: calc(var(--header-height) / 2);
+  /* border-top-right-radius: calc(var(--header-height) / 2);
+  border-bottom-left-radius: calc(var(--header-height) / 2); */
 }
 
 .header-title {
@@ -57,9 +59,10 @@ header {
   max-width: var(--max-card-width);
   margin: 48px auto;
   padding: 32px;
-  border: 4px solid var(--gradient-color-1);
+  /* border: 4px solid var(--header-footer-color); */
   border-radius: 12px;
   background: var(--card-background);
+  box-shadow: 4px 4px 4px var(--box-shadow-color);
 }
 
 .developer-profile__info-wrapper {
@@ -69,12 +72,17 @@ header {
 }
 
 .developer-profile__attributes {
+  display: flex;
   padding: 8px;
   min-width: 300px; 
 }
 
 .developer-profile__attributes p {
   margin: 0;
+}
+
+.developer-profile__personal {
+  margin: 16px;
 }
 
 .developer-profile__stats {
@@ -116,8 +124,8 @@ footer a {
 
 .icon-wrapper {
   display: inline-block;
-  background: white;
-  border: 2px solid var(--gradient-color-1);
+  background: var(--background-color);
+  border: 2px solid var(--header-footer-color);
   border-radius: 8px;
   padding: 4px;
   margin: 8px;
@@ -129,4 +137,8 @@ footer a {
 
 .about-me {
   padding: 0 16px;
+}
+
+.personal-pic {
+  border-radius: 24px;
 }

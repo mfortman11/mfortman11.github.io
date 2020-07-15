@@ -1,0 +1,25 @@
+<svg width="425" height="375" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="200" cy="200" fill="none" stroke="gray" r="0"></circle>
+    <circle cx="200" cy="200" fill="none" stroke="gray" r="30"></circle>
+    <circle cx="200" cy="200" fill="none" stroke="gray" r="60"></circle>
+    <circle cx="200" cy="200" fill="none" stroke="gray" r="90"></circle>
+    <circle cx="200" cy="200" fill="none" stroke="gray" r="120"></circle>
+    <circle cx="200" cy="200" fill="none" stroke="gray" r="150"></circle>
+    <text x="205" y="200"></text><text x="205" y="170"></text>
+    <text x="205" y="140"></text><text x="205" y="110"></text>
+    <text x="205" y="80"></text><text x="205" y="50"></text>
+    <line x1="200" y1="200" x2="200" y2="50" stroke="black"></line>
+    <text x="180" y="20">HTML</text>
+    <line x1="200" y1="200" x2="82.72527762979554" y2="106.47652972118996" stroke="black"></line>
+    <text x="39.270333155754656" y="87.77183566542796">CSS</text><line x1="200" y1="200" x2="53.760813172726444" y2="233.37814009344714" stroke="black"></line>
+    <text x="4.512975807271744" y="240.05376811213657">React</text>
+    <line x1="200" y1="200" x2="134.91743913236627" y2="335.14533018536287" stroke="black"></line>
+    <text x="101.9009269588395" y="362.17439622243546">Angular</text>
+    <line x1="200" y1="200" x2="265.0825608676337" y2="335.1453301853629" stroke="black"></line>
+    <text x="258.0990730411604" y="362.17439622243546">UI/UX Design</text>
+    <line x1="200" y1="200" x2="346.23918682727356" y2="233.3781400934472" stroke="black"></line>
+    <text x="355.4870241927282" y="240.05376811213665">Node</text>
+    <line x1="200" y1="200" x2="317.2747223702045" y2="106.47652972118999" stroke="black"></line>
+    <text x="320.72966684424534" y="87.771835665428">JavaScript</text>
+    <path d="M200,65L106.18022210383644,125.18122377695197L97.63256922090852,223.364698065413L147.933951305893,308.11626414829027L219.5247682602901,240.54359905560887L287.7435120963641,220.02688405606833L293.8197778961636,125.181223776952" stroke-width="5" stroke="blue" fill="blue" stroke-opacity="1" opacity="0.6"></path>
+</svg>
