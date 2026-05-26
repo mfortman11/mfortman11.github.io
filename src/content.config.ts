@@ -71,16 +71,6 @@ const pokemon = defineCollection({
     // Path under /public (e.g. "/pokemon/charizard.png") or remote URL.
     sprite: z.string(),
     role: z.string(),
-    stats: z
-      .object({
-        hp: z.number().int(),
-        atk: z.number().int(),
-        def: z.number().int(),
-        spa: z.number().int(),
-        spd: z.number().int(),
-        spe: z.number().int(),
-      })
-      .optional(),
     // Squad position 1–6.
     order: z.number().int().min(1).max(6),
   }),

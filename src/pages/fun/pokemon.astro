@@ -4,23 +4,85 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import PokemonCard from '../../components/PokemonCard.astro';
 
 const squad = (await getCollection('pokemon')).sort((a, b) => a.data.order - b.data.order);
+
+// Always 2 rows of 3. If fewer than 6 entries, the second row partially fills.
+const row1 = squad.slice(0, 3);
+const row2 = squad.slice(3, 6);
 ---
 
-<BaseLayout
-  title="Pokémon"
-  description="My ultimate six — picks and reasoning."
->
+<BaseLayout title="Pokémon" description="My ultimate six — picks and reasoning.">
   <section class="mx-auto max-w-5xl px-6 py-16">
     <p class="text-sm font-medium uppercase tracking-widest text-accent">Fun</p>
     <h1 class="mt-2 font-display text-4xl font-semibold tracking-tight">
       Ultimate Pokémon squad
     </h1>
     <p class="mt-3 max-w-xl text-text-muted">
-      Six picks, ordered by squad position. Expand each card for the why.
+      Six picks, ordered by squad position.
     </p>
 
-    <div class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {squad.map((entry) => <PokemonCard entry={entry} />)}
+    {/* Honeycomb: 2 rows of 3, second row offset by half a hex-width and
+        tucked up into the first row by hex_height / 4. Collapses to a single
+        column under `sm` so cards stay legible on phones. */}
+    <div class="honeycomb mt-12">
+      <div class="hex-row">
+        {row1.map((entry) => <PokemonCard entry={entry} />)}
+      </div>
+      {
+        row2.length > 0 && (
+          <div class="hex-row hex-row-offset">
+            {row2.map((entry) => <PokemonCard entry={entry} />)}
+          </div>
+        )
+      }
     </div>
   </section>
 </BaseLayout>
+
+<style>
+  .honeycomb {
+    --hex-w: 11rem;
+    --hex-h: calc(var(--hex-w) * 1.1547);
+    --hex-gap: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .hex-row {
+    display: flex;
+    gap: var(--hex-gap);
+  }
+  /* Pull row 2 up into row 1 (overlap the "points") and shift right by half
+     a hex + half a gap (canonical half-step), then bias further right via
+     --hex-shift so the stagger reads more obviously with only 2 rows. */
+  .hex-row-offset {
+    --hex-shift: 1; /* full hex-width offset — row 2's first hex starts under row 1's second hex. 0.5 = canonical centered-in-gap. */
+    margin-top: calc(var(--hex-h) / -4 + var(--hex-gap) / 2);
+    margin-left: calc((var(--hex-w) + var(--hex-gap)) * var(--hex-shift));
+  }
+
+  @media (min-width: 640px) {
+    .honeycomb {
+      --hex-w: 13rem;
+    }
+  }
+  @media (min-width: 1024px) {
+    .honeycomb {
+      --hex-w: 15rem;
+      --hex-gap: 1rem;
+    }
+  }
+
+  /* Mobile fallback — hexagons get cramped under ~480px, so stack them. */
+  @media (max-width: 479px) {
+    .honeycomb {
+      --hex-w: 14rem;
+      gap: 0.75rem;
+    }
+    .hex-row,
+    .hex-row-offset {
+      flex-direction: column;
+      gap: 0.75rem;
+      margin: 0;
+    }
+  }
+</style>

@@ -1,57 +1,219 @@
 ---
 import type { CollectionEntry } from 'astro:content';
-import { typeColors } from '../lib/typeColors';
 import { render } from 'astro:content';
+import { typeColors } from '../lib/typeColors';
 
 type Props = { entry: CollectionEntry<'pokemon'> };
 const { entry } = Astro.props;
 const { name, dex, types, sprite, role } = entry.data;
 const { Content } = await render(entry);
+
+// Tint the hex from the primary type so the squad reads at a glance.
+const primary = typeColors[types[0]];
+const secondary = typeColors[types[1] ?? types[0]];
 ---
 
 <article
-  class="group flex flex-col rounded-lg border border-border bg-surface p-4 transition-all hover:-translate-y-0.5 hover:shadow-lg"
+  class="hex group relative"
+  tabindex="0"
+  aria-label={`${name} — hover or focus for details`}
+  style={`--hex-bg: ${primary.bg}; --hex-bg-2: ${secondary.bg};`}
 >
-  <div class="flex items-start gap-4">
+  {/* Two layers: outer clip = colored border; inner clip = surface fill.
+      The 2px gap between them shows the colored ring along every hex edge. */}
+  <div class="hex-border"></div>
+  <div class="hex-face">
     <img
       src={sprite}
       alt={`Official artwork of ${name}`}
-      width="96"
-      height="96"
+      width="160"
+      height="160"
       loading="lazy"
-      class="h-24 w-24 shrink-0 object-contain"
+      class="hex-sprite"
     />
-    <div class="min-w-0 flex-1">
-      <div class="flex items-baseline justify-between gap-2">
-        <h3 class="font-display text-lg font-semibold tracking-tight text-text">{name}</h3>
-        <span class="font-mono text-xs text-text-muted">#{String(dex).padStart(3, '0')}</span>
-      </div>
-      <p class="mt-0.5 text-sm text-text-muted">{role}</p>
-      <ul class="mt-2 flex flex-wrap gap-1">
+    <div class="hex-meta">
+      <p class="hex-name">{name}</p>
+      <p class="hex-sub">
+        <span class="font-mono">#{String(dex).padStart(3, '0')}</span>
+        <span aria-hidden="true">·</span>
+        <span>{role}</span>
+      </p>
+      <ul class="hex-types">
         {
           types.map((t) => {
             const c = typeColors[t];
             return (
-              <li
-                class="rounded-sm border border-black/10 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider"
-                style={`background-color: ${c.bg}; color: ${c.fg};`}
-              >
-                {t}
-              </li>
+              <li style={`background-color: ${c.bg}; color: ${c.fg};`}>{t}</li>
             );
           })
         }
       </ul>
     </div>
   </div>
-  <details class="mt-3 text-sm">
-    <summary
-      class="cursor-pointer text-text-muted transition-colors hover:text-text marker:text-accent"
-    >
-      Why this pick
-    </summary>
-    <div class="mt-2 text-text-muted">
+  {/* Reveal: same hex clip, opacity-gated by hover/focus. Body markdown from
+      the .md file lands here — keep it short so it stays inside the hex. */}
+  <div class="hex-reveal">
+    <p class="hex-reveal-name">{name}</p>
+    <div class="hex-reveal-body">
       <Content />
     </div>
-  </details>
+  </div>
 </article>
+
+<style>
+  /* Pointy-top hexagon. Height = width * 2/sqrt(3) ≈ 1.1547. */
+  .hex {
+    width: var(--hex-w, 16rem);
+    aspect-ratio: 1 / 1.1547;
+    position: relative;
+    transition:
+      transform var(--duration) var(--ease-out),
+      filter var(--duration) var(--ease-out);
+  }
+  .hex:hover,
+  .hex:focus-within {
+    transform: translateY(-4px);
+    filter: drop-shadow(0 12px 24px hsl(0 0% 0% / 0.25));
+  }
+  .hex:focus-visible {
+    outline: none; /* the reveal + lift is the focus affordance */
+  }
+
+  .hex-border,
+  .hex-face,
+  .hex-reveal {
+    position: absolute;
+    inset: 0;
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  }
+  .hex-border {
+    background-image: linear-gradient(135deg, var(--hex-bg) 0%, var(--hex-bg-2) 100%);
+  }
+  .hex-face {
+    /* The 2px inset reveals the colored border ring. */
+    inset: 3px;
+    background-color: var(--surface);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1.25rem 0.5rem 1.5rem;
+    text-align: center;
+  }
+
+  .hex-sprite {
+    width: 55%;
+    height: auto;
+    object-fit: contain;
+    /* Subtle drop shadow under the sprite plays well with the hex tint. */
+    filter: drop-shadow(0 6px 8px hsl(0 0% 0% / 0.15));
+    transition: transform var(--duration) var(--ease-out);
+  }
+  .hex:hover .hex-sprite,
+  .hex:focus-within .hex-sprite {
+    transform: scale(1.06);
+  }
+
+  .hex-meta {
+    margin-top: 0.25rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+  }
+  .hex-name {
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--text);
+    font-size: 1rem;
+    line-height: 1.1;
+  }
+  .hex-sub {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    font-size: 0.7rem;
+    color: var(--text-muted);
+  }
+  .hex-types {
+    margin-top: 0.125rem;
+    display: flex;
+    gap: 0.25rem;
+  }
+  .hex-types li {
+    border-radius: 2px;
+    padding: 0.075rem 0.375rem;
+    font-size: 0.55rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    border: 1px solid hsl(0 0% 0% / 0.1);
+  }
+
+  /* Reveal panel — same hex shape, fades in over the face. The padding-block
+     is intentionally large so prose stays inside the wider middle of the hex
+     and doesn't crash into the pointy top/bottom. */
+  .hex-reveal {
+    inset: 3px; /* match .hex-face inset so it lines up with the border ring */
+    background-color: var(--surface);
+    color: var(--text);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 22% 1rem;
+    text-align: center;
+    opacity: 0;
+    transform: scale(0.97);
+    transition:
+      opacity var(--duration) var(--ease-out),
+      transform var(--duration) var(--ease-out);
+    pointer-events: none;
+  }
+  .hex:hover .hex-reveal,
+  .hex:focus-within .hex-reveal {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .hex-reveal-name {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 0.85rem;
+    letter-spacing: -0.01em;
+    color: var(--accent);
+    margin-bottom: 0.375rem;
+  }
+  .hex-reveal-body {
+    font-size: 0.75rem;
+    line-height: 1.35;
+    color: var(--text-muted);
+    /* Clamp body to ~5 lines so longer entries don't overflow the hex. */
+    display: -webkit-box;
+    -webkit-line-clamp: 5;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .hex-reveal-body :global(p) {
+    margin: 0;
+  }
+  .hex-reveal-body :global(p + p) {
+    margin-top: 0.375rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hex,
+    .hex-sprite,
+    .hex-reveal {
+      transition: none;
+    }
+    .hex:hover,
+    .hex:focus-within {
+      transform: none;
+    }
+    .hex-reveal {
+      transform: none;
+    }
+  }
+</style>
