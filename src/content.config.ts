@@ -1,13 +1,18 @@
 // Content collections — Astro 5/6 content layer API.
 //
-// Adding a new entry: drop a markdown file under the matching directory below.
-// Filenames prefixed `_` (e.g. `_example.md`) are seeds — safe to delete once
-// real content lands. They're still loaded into the collection because the
-// glob doesn't filter them out, so routes render against them out of the box.
+// `projects` uses the glob loader (one .md per case study) so each project
+// gets a markdown body. `pokemon` and `nba` use the file() loader pointed at
+// a single YAML file each — short blurbs don't need their own files.
+//
+// Schemas validate at build time; mismatch fails the build with a precise
+// pointer to the offending entry.
 
 import { defineCollection } from 'astro:content';
 import { z } from 'astro:schema';
-import { glob } from 'astro/loaders';
+import { glob, file } from 'astro/loaders';
+import yaml from 'yaml';
+
+const yamlParser = (text: string) => yaml.parse(text);
 
 const projects = defineCollection({
   loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/projects' }),
@@ -63,7 +68,7 @@ const pokemonType = z.enum([
 ]);
 
 const pokemon = defineCollection({
-  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/pokemon' }),
+  loader: file('src/data/pokemon.yml', { parser: yamlParser }),
   schema: z.object({
     name: z.string(),
     dex: z.number().int().positive(),
@@ -73,20 +78,28 @@ const pokemon = defineCollection({
     role: z.string(),
     // Squad position 1–6.
     order: z.number().int().min(1).max(6),
+    // 1–2 sentences shown in the hex hover/focus reveal.
+    blurb: z.string(),
   }),
 });
 
 const nba = defineCollection({
-  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/nba' }),
+  loader: file('src/data/nba.yml', { parser: yamlParser }),
   schema: z.object({
     name: z.string(),
-    // 1–10.
-    rank: z.number().int().min(1).max(10),
+    // My personal rank, 1–25.
+    rank: z.number().int().min(1).max(25),
+    // Where the broader basketball internet tends to put them. Optional so
+    // a newer player without consensus yet can be ranked without forcing one.
+    consensusRank: z.number().int().min(1).max(50).optional(),
     // "1980s", "2000s–2010s", etc.
     era: z.string(),
     teams: z.array(z.string()),
     accolades: z.array(z.string()).default([]),
     photo: z.string().optional(),
+    // Free-form take rendered in the card body. Supports paragraph breaks
+    // (YAML blank lines fold to paragraph breaks with the `>` scalar).
+    blurb: z.string(),
   }),
 });
 

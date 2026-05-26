@@ -6,12 +6,14 @@ import PlayerCard from '../../components/PlayerCard.astro';
 const players = (await getCollection('nba')).sort((a, b) => a.data.rank - b.data.rank);
 ---
 
-<BaseLayout title="NBA Top 10" description="My all-time NBA top 10 with blurbs.">
-  <section class="mx-auto max-w-3xl px-6 py-16">
+<BaseLayout title="NBA Top 25" description="My all-time NBA top 25 with rankings vs. consensus.">
+  <section class="mx-auto max-w-4xl px-6 py-16">
     <p class="text-sm font-medium uppercase tracking-widest text-accent">Fun</p>
-    <h1 class="mt-2 font-display text-4xl font-semibold tracking-tight">NBA top 10</h1>
-    <p class="mt-3 max-w-xl text-text-muted">
-      All-time ranking. Bring receipts to disagree.
+    <h1 class="mt-2 font-display text-4xl font-semibold tracking-tight">NBA top 25</h1>
+    <p class="mt-3 max-w-2xl text-text-muted">
+      All-time ranking. Each card shows where consensus puts the player and where I put them —
+      green means I have them higher than the broader internet does, red means lower. Scroll
+      through; bring receipts to disagree.
     </p>
 
     <ol class="mt-10 flex flex-col gap-4">

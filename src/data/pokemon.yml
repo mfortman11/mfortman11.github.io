@@ -1,0 +1,66 @@
+# Ultimate Pokémon squad — single source of truth.
+#
+# Schema is enforced in src/content.config.ts. To reorder, just shuffle blocks
+# below or change the `order:` field (page sorts by order 1–6, slices into
+# rows of 3). `blurb:` supports paragraph breaks via blank lines.
+
+- id: nidoking
+  name: Nidoking
+  dex: 34
+  types: [poison, ground]
+  sprite: https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/34.png
+  role: Mixed Sweeper
+  order: 1
+  blurb: >
+    TODO_USER: 1–2 sentences on why this one — game you used it in,
+    favorite move, attitude, whatever sells it.
+
+- id: heracross
+  name: Heracross
+  dex: 214
+  types: [bug, fighting]
+  sprite: https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/214.png
+  role: Physical Wallbreaker
+  order: 2
+  blurb: >
+    TODO_USER: 1–2 sentences on why this one.
+
+- id: starmie
+  name: Starmie
+  dex: 121
+  types: [water, psychic]
+  sprite: https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/121.png
+  role: Special Sweeper / Spinner
+  order: 3
+  blurb: >
+    TODO_USER: 1–2 sentences on why this one.
+
+- id: hydreigon
+  name: Hydreigon
+  dex: 635
+  types: [dark, dragon]
+  sprite: https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/635.png
+  role: Special Sweeper
+  order: 4
+  blurb: >
+    TODO_USER: 1–2 sentences on why this one.
+
+- id: aerodactyl
+  name: Aerodactyl
+  dex: 142
+  types: [rock, flying]
+  sprite: https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/142.png
+  role: Suicide Lead
+  order: 5
+  blurb: >
+    TODO_USER: 1–2 sentences on why this one.
+
+- id: ceruledge
+  name: Ceruledge
+  dex: 936
+  types: [fire, ghost]
+  sprite: https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/937.png
+  role: Setup Sweeper
+  order: 6
+  blurb: >
+    TODO_USER: 1–2 sentences on why this one.

@@ -1,63 +1,108 @@
 ---
 import type { CollectionEntry } from 'astro:content';
-import { render } from 'astro:content';
 
 type Props = { entry: CollectionEntry<'nba'> };
 const { entry } = Astro.props;
-const { name, rank, era, teams, accolades, photo } = entry.data;
-const { Content } = await render(entry);
+const { name, rank, consensusRank, era, teams, accolades, photo, blurb } = entry.data;
 
-// Subtle era-keyed accent band on the left.
+// YAML `>` folds single newlines to spaces and preserves blank lines as
+// paragraph breaks — split on double newline to render proper <p>s.
+const paragraphs = blurb.split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean);
+
+// Consensus delta — "matches", "+3 from consensus", "-2 from consensus".
+let consensusLabel: string | null = null;
+let consensusTone: 'match' | 'up' | 'down' = 'match';
+if (consensusRank != null) {
+  const delta = consensusRank - rank; // +ve = I rank them higher than consensus
+  if (delta === 0) consensusLabel = `Matches consensus (#${consensusRank})`;
+  else if (delta > 0) {
+    consensusLabel = `Consensus #${consensusRank} · I have them ${delta} higher`;
+    consensusTone = 'up';
+  } else {
+    consensusLabel = `Consensus #${consensusRank} · I have them ${Math.abs(delta)} lower`;
+    consensusTone = 'down';
+  }
+}
+
+// Era-keyed accent band — same map as before, extended for older decades.
 const eraTint: Record<string, string> = {
-  '1960s': 'hsl(38 80% 55% / 0.18)',
-  '1970s': 'hsl(20 75% 55% / 0.18)',
-  '1980s': 'hsl(0 75% 60% / 0.18)',
-  '1980s–1990s': 'hsl(330 70% 55% / 0.18)',
-  '1990s': 'hsl(290 65% 60% / 0.18)',
-  '1990s–2000s': 'hsl(250 70% 65% / 0.18)',
-  '2000s': 'hsl(210 70% 60% / 0.18)',
-  '2000s–2010s': 'hsl(190 70% 55% / 0.18)',
-  '2010s': 'hsl(170 65% 50% / 0.18)',
-  '2010s–2020s': 'hsl(150 60% 50% / 0.18)',
-  '2020s': 'hsl(130 60% 50% / 0.18)',
+  '1950s': 'hsl(48 80% 55% / 0.22)',
+  '1950s–1960s': 'hsl(42 80% 55% / 0.22)',
+  '1960s': 'hsl(38 80% 55% / 0.22)',
+  '1960s–1970s': 'hsl(28 78% 55% / 0.22)',
+  '1970s': 'hsl(20 75% 55% / 0.22)',
+  '1970s–1980s': 'hsl(10 75% 58% / 0.22)',
+  '1980s': 'hsl(0 75% 60% / 0.22)',
+  '1980s–1990s': 'hsl(330 70% 55% / 0.22)',
+  '1980s–2000s': 'hsl(310 70% 58% / 0.22)',
+  '1990s': 'hsl(290 65% 60% / 0.22)',
+  '1990s–2000s': 'hsl(270 70% 65% / 0.22)',
+  '1990s–2010s': 'hsl(260 70% 65% / 0.22)',
+  '2000s': 'hsl(210 70% 60% / 0.22)',
+  '2000s–2010s': 'hsl(190 70% 55% / 0.22)',
+  '2000s–2020s': 'hsl(180 70% 50% / 0.22)',
+  '2010s': 'hsl(170 65% 50% / 0.22)',
+  '2010s–2020s': 'hsl(150 60% 50% / 0.22)',
+  '2020s': 'hsl(130 60% 50% / 0.22)',
 };
-const tint = eraTint[era] ?? 'hsl(252 70% 60% / 0.18)';
+const tint = eraTint[era] ?? 'hsl(252 70% 60% / 0.22)';
+
+const toneClass =
+  consensusTone === 'up'
+    ? 'text-success'
+    : consensusTone === 'down'
+      ? 'text-danger'
+      : 'text-text-muted';
 ---
 
 <article
-  class="relative flex gap-5 overflow-hidden rounded-lg border border-border bg-surface p-5 pl-6"
+  class="relative flex w-full gap-6 overflow-hidden rounded-lg border border-border bg-surface p-6 pl-8 transition-colors hover:border-accent/40"
 >
   <span
     aria-hidden="true"
-    class="absolute inset-y-0 left-0 w-1"
-    style={`background-color: ${tint}; box-shadow: inset 0 0 0 9999px ${tint};`}
+    class="absolute inset-y-0 left-0 w-1.5"
+    style={`background-color: ${tint};`}
   ></span>
+
+  {/* Big rank — always visible on the left. */}
   <div
     aria-hidden="true"
-    class="grid h-14 w-14 shrink-0 place-items-center rounded-md bg-surface-2 font-display text-2xl font-semibold tabular-nums text-text-muted"
+    class="grid h-20 w-20 shrink-0 place-items-center rounded-md bg-surface-2 font-display text-4xl font-semibold tabular-nums text-text"
   >
     {rank}
   </div>
+
   {
     photo && (
       <img
         src={photo}
         alt={name}
-        width="80"
-        height="80"
+        width="96"
+        height="96"
         loading="lazy"
-        class="h-20 w-20 shrink-0 rounded-md object-cover"
+        class="h-24 w-24 shrink-0 rounded-md object-cover"
       />
     )
   }
+
   <div class="min-w-0 flex-1">
-    <h3 class="font-display text-xl font-semibold tracking-tight text-text">{name}</h3>
-    <p class="mt-0.5 text-xs text-text-muted">
-      {era} · {teams.join(', ')}
-    </p>
+    <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+      <h3 class="font-display text-xl font-semibold tracking-tight text-text">{name}</h3>
+      <span class="text-xs text-text-muted">{era}</span>
+    </div>
+    <p class="mt-0.5 text-xs text-text-muted">{teams.join(' · ')}</p>
+
+    {
+      consensusLabel && (
+        <p class={`mt-2 font-mono text-[11px] uppercase tracking-wider ${toneClass}`}>
+          {consensusLabel}
+        </p>
+      )
+    }
+
     {
       accolades.length > 0 && (
-        <ul class="mt-2 flex flex-wrap gap-1.5">
+        <ul class="mt-3 flex flex-wrap gap-1.5">
           {accolades.map((a) => (
             <li class="rounded-sm border border-border bg-bg px-2 py-0.5 text-[11px] text-text-muted">
               {a}
@@ -66,8 +111,9 @@ const tint = eraTint[era] ?? 'hsl(252 70% 60% / 0.18)';
         </ul>
       )
     }
-    <div class="prose prose-sm mt-3 max-w-none text-text-muted dark:prose-invert">
-      <Content />
+
+    <div class="mt-4 space-y-2 text-sm leading-relaxed text-text-muted">
+      {paragraphs.map((p) => <p>{p}</p>)}
     </div>
   </div>
 </article>
