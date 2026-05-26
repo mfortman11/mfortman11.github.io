@@ -1,0 +1,25 @@
+---
+type Props = {
+  /** Tailwind class string for sizing/position. Defaults to a hero-sized blob. */
+  class?: string;
+  /** Use `--gradient-subtle` (vertical fade) instead of `--gradient-primary`. */
+  subtle?: boolean;
+};
+
+const { class: className = '', subtle = false } = Astro.props;
+const gradient = subtle ? 'var(--gradient-subtle)' : 'var(--gradient-primary)';
+---
+
+<div
+  aria-hidden="true"
+  class={`pointer-events-none absolute inset-0 -z-10 opacity-60 blur-3xl ${className}`}
+  style={`background-image: ${gradient}; background-size: 200% 200%;`}
+>
+</div>
+<style>
+  @media (prefers-reduced-motion: no-preference) {
+    div {
+      animation: var(--animate-gradient-shift);
+    }
+  }
+</style>

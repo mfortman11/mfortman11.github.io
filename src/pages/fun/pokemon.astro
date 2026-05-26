@@ -1,0 +1,26 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PokemonCard from '../../components/PokemonCard.astro';
+
+const squad = (await getCollection('pokemon')).sort((a, b) => a.data.order - b.data.order);
+---
+
+<BaseLayout
+  title="Pokémon"
+  description="My ultimate six — picks and reasoning."
+>
+  <section class="mx-auto max-w-5xl px-6 py-16">
+    <p class="text-sm font-medium uppercase tracking-widest text-accent">Fun</p>
+    <h1 class="mt-2 font-display text-4xl font-semibold tracking-tight">
+      Ultimate Pokémon squad
+    </h1>
+    <p class="mt-3 max-w-xl text-text-muted">
+      Six picks, ordered by squad position. Expand each card for the why.
+    </p>
+
+    <div class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {squad.map((entry) => <PokemonCard entry={entry} />)}
+    </div>
+  </section>
+</BaseLayout>

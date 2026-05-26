@@ -1,0 +1,44 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="About"
+  description="About Mike Fortman — what I work on and what I care about."
+>
+  <article class="mx-auto max-w-2xl px-6 py-16">
+    <h1 class="font-display text-4xl font-semibold tracking-tight">About</h1>
+
+    {/* TODO_USER: replace placeholder bio with the real one. */}
+    <div class="mt-8 space-y-5 text-text-muted">
+      <p>
+        I'm a frontend engineer with a full-stack background. I've spent the last several years
+        focused on the UI layer — design systems, component libraries, micro-frontends — because
+        that's where the work I find most satisfying lives.
+      </p>
+      <p>
+        Lately: design tokens that survive a rebrand, accessibility that isn't bolted on after a
+        Lighthouse run, and small, kinetic data viz with D3.
+      </p>
+      <p>
+        Computer Engineering & Computer Sciences at UW–Madison, class of '17. Originally from
+        Franklin, WI.
+      </p>
+    </div>
+
+    <section class="mt-12">
+      <h2 class="font-display text-xl font-semibold tracking-tight">Currently</h2>
+      <ul class="mt-4 space-y-2 text-text-muted">
+        <li>
+          <span class="text-text">Building:</span> this site (Astro + Tailwind v4, token-first design system).
+        </li>
+        <li>
+          <span class="text-text">Reading:</span> <em>TODO_USER</em>
+        </li>
+        <li>
+          <span class="text-text">Learning:</span> <em>TODO_USER</em>
+        </li>
+      </ul>
+    </section>
+  </article>
+</BaseLayout>

@@ -1,0 +1,42 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { socials } from '../lib/socials';
+
+const email = socials.find((s) => s.href.startsWith('mailto:'))?.href ?? 'mailto:hello@example.com';
+const externalSocials = socials.filter((s) => !s.href.startsWith('mailto:'));
+---
+
+<BaseLayout title="Contact" description="Get in touch with Mike Fortman.">
+  <section class="mx-auto max-w-2xl px-6 py-16">
+    <h1 class="font-display text-4xl font-semibold tracking-tight">Contact</h1>
+    <p class="mt-4 text-text-muted">
+      Best way to reach me is email. No forms — they're spam magnets.
+    </p>
+
+    <a
+      href={email}
+      class="mt-8 inline-flex items-center gap-2 rounded-lg px-5 py-3 font-medium text-white shadow transition-transform hover:-translate-y-0.5"
+      style="background-image: var(--gradient-primary);"
+    >
+      <span>Email me</span>
+      <span aria-hidden="true">→</span>
+    </a>
+
+    <ul class="mt-10 flex flex-wrap gap-3 text-sm">
+      {
+        externalSocials.map((s) => (
+          <li>
+            <a
+              href={s.href}
+              class="rounded border border-border bg-surface px-3 py-1.5 text-text-muted transition-colors hover:border-accent/50 hover:text-text"
+              rel="me noopener"
+              target="_blank"
+            >
+              {s.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+</BaseLayout>

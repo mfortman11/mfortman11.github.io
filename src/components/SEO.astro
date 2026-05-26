@@ -1,0 +1,42 @@
+---
+import { defaultDescription, formatTitle, siteName, author } from '../lib/seo';
+
+type Props = {
+  title?: string;
+  description?: string;
+  /** Path under /og or absolute URL. Defaults to /og/default.png. */
+  image?: string;
+  /** Defaults to the current URL. Pass an absolute URL to override. */
+  canonical?: string;
+};
+
+const {
+  title,
+  description = defaultDescription,
+  image = '/og/default.png',
+  canonical,
+} = Astro.props;
+
+const resolvedTitle = formatTitle(title);
+const canonicalURL = new URL(canonical ?? Astro.url.pathname, Astro.site);
+const ogImageURL = new URL(image, Astro.site).toString();
+---
+
+<title>{resolvedTitle}</title>
+<meta name="description" content={description} />
+<meta name="author" content={author} />
+<link rel="canonical" href={canonicalURL.toString()} />
+
+{/* Open Graph */}
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content={siteName} />
+<meta property="og:title" content={resolvedTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonicalURL.toString()} />
+<meta property="og:image" content={ogImageURL} />
+
+{/* Twitter card */}
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={resolvedTitle} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImageURL} />

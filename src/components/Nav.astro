@@ -1,0 +1,129 @@
+---
+import ThemeToggle from './ThemeToggle.astro';
+import { siteName } from '../lib/seo';
+
+const links = [
+  { href: '/', label: 'Home' },
+  { href: '/work', label: 'Work' },
+  { href: '/about', label: 'About' },
+  { href: '/fun', label: 'Fun' },
+  { href: '/contact', label: 'Contact' },
+];
+
+// `pathname` lets the active-link styling work even under view transitions
+// since the markup is re-rendered per page.
+const pathname = Astro.url.pathname.replace(/\/$/, '') || '/';
+const isActive = (href: string) => (href === '/' ? pathname === '/' : pathname.startsWith(href));
+---
+
+<header
+  class="sticky top-0 z-50 border-b border-border/60 bg-bg/70 backdrop-blur supports-[backdrop-filter]:bg-bg/55"
+>
+  <nav class="mx-auto flex h-14 max-w-5xl items-center justify-between px-6" aria-label="Primary">
+    <a
+      href="/"
+      class="font-display text-sm font-semibold tracking-tight text-text hover:text-accent"
+    >
+      {siteName}
+    </a>
+
+    {/* Desktop links */}
+    <ul class="hidden items-center gap-1 md:flex">
+      {
+        links.slice(1).map((l) => (
+          <li>
+            <a
+              href={l.href}
+              aria-current={isActive(l.href) ? 'page' : undefined}
+              class:list={[
+                'rounded px-3 py-1.5 text-sm transition-colors',
+                isActive(l.href)
+                  ? 'text-text'
+                  : 'text-text-muted hover:bg-surface-2 hover:text-text',
+              ]}
+            >
+              {l.label}
+              {isActive(l.href) && (
+                <span class="ml-1 inline-block h-1 w-1 rounded-full bg-accent align-middle" />
+              )}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="flex items-center gap-1">
+      <ThemeToggle />
+      {/* Mobile menu button */}
+      <button
+        type="button"
+        id="nav-toggle"
+        class="inline-flex h-9 w-9 items-center justify-center rounded text-text-muted transition-colors hover:bg-surface-2 hover:text-text md:hidden"
+        aria-label="Open menu"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.75"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="h-5 w-5"
+          aria-hidden="true"
+        >
+          <path d="M3 6h18M3 12h18M3 18h18"></path>
+        </svg>
+      </button>
+    </div>
+  </nav>
+
+  {/* Mobile menu */}
+  <div id="mobile-menu" hidden class="border-t border-border/60 md:hidden">
+    <ul class="mx-auto flex max-w-5xl flex-col gap-1 px-6 py-3">
+      {
+        links.slice(1).map((l) => (
+          <li>
+            <a
+              href={l.href}
+              aria-current={isActive(l.href) ? 'page' : undefined}
+              class:list={[
+                'block rounded px-3 py-2 text-sm transition-colors',
+                isActive(l.href)
+                  ? 'bg-surface-2 text-text'
+                  : 'text-text-muted hover:bg-surface-2 hover:text-text',
+              ]}
+            >
+              {l.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</header>
+
+<script>
+  function bindNav() {
+    const btn = document.getElementById('nav-toggle');
+    const menu = document.getElementById('mobile-menu');
+    if (!btn || !menu || btn.dataset.bound === 'true') return;
+    btn.dataset.bound = 'true';
+
+    btn.addEventListener('click', () => {
+      const open = menu.hasAttribute('hidden');
+      if (open) {
+        menu.removeAttribute('hidden');
+      } else {
+        menu.setAttribute('hidden', '');
+      }
+      btn.setAttribute('aria-expanded', String(open));
+      btn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    });
+  }
+
+  bindNav();
+  document.addEventListener('astro:after-swap', bindNav);
+</script>

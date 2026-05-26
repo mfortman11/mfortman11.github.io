@@ -1,17 +1,110 @@
 ---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Gradient from '../components/Gradient.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { socials } from '../lib/socials';
 
+const projects = await getCollection('projects');
+const featured = projects
+  .filter((p) => p.data.featured)
+  .sort((a, b) => a.data.order - b.data.order || b.data.year - a.data.year)
+  .slice(0, 3);
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout
+  title="Home"
+  description="Mike Fortman — frontend engineer building fast, accessible, design-token-driven web UIs."
+>
+  {/* Hero */}
+  <section class="relative isolate overflow-hidden">
+    <Gradient class="h-[36rem]" />
+    <div class="mx-auto max-w-3xl px-6 pt-24 pb-20 sm:pt-32">
+      <p class="text-sm font-medium uppercase tracking-widest text-accent">Frontend Engineer</p>
+      <h1
+        class="mt-3 font-display text-5xl font-semibold tracking-tight text-text sm:text-6xl"
+        style="animation: var(--animate-fade-up);"
+      >
+        Mike Fortman
+      </h1>
+      <p
+        class="mt-5 max-w-xl text-lg text-text-muted"
+        style="animation: var(--animate-fade-up); animation-delay: 80ms;"
+      >
+        I build fast, accessible web UIs — currently most interested in design systems, data
+        visualization, and the small interactions that make a product feel cared about.
+      </p>
+      <div class="mt-8 flex flex-wrap items-center gap-3 text-sm">
+        {
+          socials.map((s) => (
+            <a
+              href={s.href}
+              class="rounded border border-border bg-surface px-3 py-1.5 text-text-muted transition-colors hover:border-accent/50 hover:text-text"
+              rel={s.href.startsWith('http') ? 'me noopener' : undefined}
+              target={s.href.startsWith('http') ? '_blank' : undefined}
+            >
+              {s.label}
+            </a>
+          ))
+        }
+        <a
+          href="/resume.pdf"
+          class="rounded border border-border bg-surface px-3 py-1.5 text-text-muted transition-colors hover:border-accent/50 hover:text-text"
+        >
+          Resume
+        </a>
+      </div>
+    </div>
+  </section>
+
+  {/* Selected work */}
+  <section class="mx-auto max-w-5xl px-6 py-16">
+    <div class="flex items-baseline justify-between">
+      <h2 class="font-display text-2xl font-semibold tracking-tight">Selected work</h2>
+      <a href="/work" class="text-sm text-text-muted transition-colors hover:text-accent">
+        See all →
+      </a>
+    </div>
+    {
+      featured.length > 0 ? (
+        <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {featured.map((p) => (
+            <ProjectCard project={p} />
+          ))}
+        </div>
+      ) : (
+        <p class="mt-6 text-sm text-text-muted">
+          Featured projects land here as soon as `featured: true` is set on entries under{' '}
+          <code class="font-mono text-xs">src/content/projects/</code>.
+        </p>
+      )
+    }
+  </section>
+
+  {/* Off the clock */}
+  <section class="mx-auto max-w-5xl px-6 py-16">
+    <h2 class="font-display text-2xl font-semibold tracking-tight">Off the clock</h2>
+    <div class="mt-6 grid gap-4 sm:grid-cols-2">
+      <a
+        href="/fun/pokemon"
+        class="group relative overflow-hidden rounded-lg border border-border bg-surface p-6 transition-all hover:-translate-y-0.5 hover:shadow"
+      >
+        <Gradient class="opacity-30" subtle />
+        <p class="text-xs font-medium uppercase tracking-widest text-accent">Fun</p>
+        <h3 class="mt-1 font-display text-xl font-semibold tracking-tight">
+          Ultimate Pokémon squad
+        </h3>
+        <p class="mt-2 text-sm text-text-muted">Six picks, with reasoning. Fight me.</p>
+      </a>
+      <a
+        href="/fun/nba"
+        class="group relative overflow-hidden rounded-lg border border-border bg-surface p-6 transition-all hover:-translate-y-0.5 hover:shadow"
+      >
+        <Gradient class="opacity-30" subtle />
+        <p class="text-xs font-medium uppercase tracking-widest text-accent">Fun</p>
+        <h3 class="mt-1 font-display text-xl font-semibold tracking-tight">NBA top 10</h3>
+        <p class="mt-2 text-sm text-text-muted">Ranked. Receipts in the blurbs.</p>
+      </a>
+    </div>
+  </section>
+</BaseLayout>

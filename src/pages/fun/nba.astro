@@ -1,0 +1,21 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PlayerCard from '../../components/PlayerCard.astro';
+
+const players = (await getCollection('nba')).sort((a, b) => a.data.rank - b.data.rank);
+---
+
+<BaseLayout title="NBA Top 10" description="My all-time NBA top 10 with blurbs.">
+  <section class="mx-auto max-w-3xl px-6 py-16">
+    <p class="text-sm font-medium uppercase tracking-widest text-accent">Fun</p>
+    <h1 class="mt-2 font-display text-4xl font-semibold tracking-tight">NBA top 10</h1>
+    <p class="mt-3 max-w-xl text-text-muted">
+      All-time ranking. Bring receipts to disagree.
+    </p>
+
+    <ol class="mt-10 flex flex-col gap-4">
+      {players.map((entry) => <li><PlayerCard entry={entry} /></li>)}
+    </ol>
+  </section>
+</BaseLayout>

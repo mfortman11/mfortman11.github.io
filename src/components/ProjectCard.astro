@@ -1,0 +1,28 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+type Props = { project: CollectionEntry<'projects'> };
+const { project } = Astro.props;
+const { title, summary, role, year, tags } = project.data;
+---
+
+<a
+  href={`/work/${project.id}`}
+  class="group block rounded-lg border border-border bg-surface p-5 transition-all hover:-translate-y-0.5 hover:border-accent/50 hover:shadow"
+>
+  <div class="flex items-baseline justify-between gap-4">
+    <h3 class="font-display text-lg font-semibold tracking-tight text-text group-hover:text-accent">
+      {title}
+    </h3>
+    <span class="text-xs text-text-muted">{year}</span>
+  </div>
+  <p class="mt-2 text-sm text-text-muted">{summary}</p>
+  <div class="mt-4 flex flex-wrap items-center gap-2 text-xs text-text-muted">
+    <span class="rounded-sm bg-surface-2 px-2 py-0.5">{role}</span>
+    {
+      tags.slice(0, 4).map((t) => (
+        <span class="rounded-sm border border-border px-2 py-0.5">{t}</span>
+      ))
+    }
+  </div>
+</a>

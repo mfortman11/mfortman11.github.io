@@ -1,0 +1,97 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+
+const projects = (await getCollection('projects')).sort((a, b) => {
+  // featured first, then by manual `order`, then by year desc.
+  if (a.data.featured !== b.data.featured) return a.data.featured ? -1 : 1;
+  if (a.data.order !== b.data.order) return a.data.order - b.data.order;
+  return b.data.year - a.data.year;
+});
+
+// All unique tags, for the filter row.
+const allTags = Array.from(new Set(projects.flatMap((p) => p.data.tags))).sort();
+---
+
+<BaseLayout
+  title="Work"
+  description="Projects Mike Fortman has built — case studies, tech tags, and links."
+>
+  <section class="mx-auto max-w-5xl px-6 py-16">
+    <h1 class="font-display text-4xl font-semibold tracking-tight">Work</h1>
+    <p class="mt-3 max-w-xl text-text-muted">
+      Shipped projects. Click into any card for the case study.
+    </p>
+
+    {
+      allTags.length > 0 && (
+        <div class="mt-8 flex flex-wrap items-center gap-2 text-xs">
+          <span class="mr-1 text-text-muted">Filter:</span>
+          <button
+            type="button"
+            data-filter="*"
+            class="rounded border border-accent bg-accent/10 px-2 py-1 font-medium text-accent"
+            aria-pressed="true"
+          >
+            All
+          </button>
+          {allTags.map((t) => (
+            <button
+              type="button"
+              data-filter={t}
+              class="rounded border border-border bg-surface px-2 py-1 text-text-muted transition-colors hover:border-accent/50 hover:text-text"
+              aria-pressed="false"
+            >
+              {t}
+            </button>
+          ))}
+        </div>
+      )
+    }
+
+    <div id="project-grid" class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        projects.map((p) => (
+          <div data-tags={p.data.tags.join('|')}>
+            <ProjectCard project={p} />
+          </div>
+        ))
+      }
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  function bindFilters() {
+    const grid = document.getElementById('project-grid');
+    if (!grid || (grid as HTMLElement).dataset.bound === 'true') return;
+    (grid as HTMLElement).dataset.bound = 'true';
+
+    const buttons = document.querySelectorAll<HTMLButtonElement>('button[data-filter]');
+    buttons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const filter = btn.dataset.filter ?? '*';
+        buttons.forEach((b) => {
+          const active = b === btn;
+          b.setAttribute('aria-pressed', String(active));
+          b.classList.toggle('border-accent', active);
+          b.classList.toggle('bg-accent/10', active);
+          b.classList.toggle('text-accent', active);
+          b.classList.toggle('font-medium', active);
+          b.classList.toggle('border-border', !active);
+          b.classList.toggle('bg-surface', !active);
+          b.classList.toggle('text-text-muted', !active);
+        });
+
+        grid.querySelectorAll<HTMLElement>('[data-tags]').forEach((cell) => {
+          const tags = (cell.dataset.tags ?? '').split('|');
+          cell.hidden = filter !== '*' && !tags.includes(filter);
+        });
+      });
+    });
+  }
+
+  bindFilters();
+  document.addEventListener('astro:after-swap', bindFilters);
+</script>
