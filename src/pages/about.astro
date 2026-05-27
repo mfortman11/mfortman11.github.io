@@ -1,44 +1,720 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { Icon } from 'astro-icon/components';
+
+// Resume data — kept inline; this page is the only consumer. If/when other
+// pages want to read it (e.g. /work index pulling experience), promote to
+// src/data/resume.yml on the same `file()` loader pattern as pokemon/nba.
+//
+// Icon naming:
+// - "simple-icons:foo" / "logos:foo" come from the Iconify packs installed
+//   as dev deps; tree-shaken at build, so only referenced names ship.
+// - "wisconsin" (no prefix) is a local SVG from src/icons/.
+// - `icon: undefined` (or omitted) renders the chip without a glyph — used
+//   for skills like RAG/MCP that have no canonical logo.
+
+type Product = { name: string; icon?: string };
+type Role = {
+  title: string;
+  stack: string;
+  bullets: string[];
+  icon?: string;
+  /** Additional products/projects built during this role — render as chip row. */
+  products?: Product[];
+};
+type Job = {
+  company: string;
+  location: string;
+  period: string;
+  icon?: string;
+  roles: Role[];
+};
+
+const experience: Job[] = [
+  {
+    company: 'IBM (formerly DataStax)',
+    location: 'Remote',
+    period: 'Mar 2021 — Present',
+    icon: 'simple-icons:ibm',
+    roles: [
+      {
+        title: 'Langflow — Lead Frontend Engineer',
+        stack: 'React · Next.js · Python',
+        icon: 'langflow',
+        products: [{ name: 'OpenRAG', icon: 'openrag' }],
+        bullets: [
+          'Led a frontend team of 5 engineers delivering Langflow to production for enterprise customers, partnering closely with design to set craft standards across the platform.',
+          'Spearheaded a full platform redesign of Langflow — rebuilding information architecture, interaction patterns, and visual language to transform a fragmented tool into a cohesive, modern developer experience. Featured on stage at NVIDIA GTC.',
+          'Revamped rendering performance on the React Flow canvas, eliminating unnecessary rerenders for a ~40% improvement in interaction latency.',
+          'Grew Langflow from ~20k to over 140k GitHub stars, making it one of the most widely adopted open-source AI projects on GitHub.',
+          'Built OpenRAG, an open-source platform for agentic RAG, orchestrating containerized services including Langflow, OpenSearch, and Docling. Launched on IBM’s watsonx.data platform.',
+        ],
+      },
+      {
+        title: 'Gen AI & Ecosystems — Senior Software Engineer',
+        stack: 'TypeScript · Vector Search · LangChain · LlamaIndex',
+        bullets: [
+          'Sole engineer owning OSS integrations of Astra DB vector search across Vercel, LangChain, and LlamaIndex.',
+          'Authored and maintained vector-store integrations and starter templates across the GenAI ecosystem.',
+          'Built a GitHub Copilot extension letting developers query and manage Astra DB collections — one of 12 launch partners featured at the Microsoft Build keynote.',
+        ],
+      },
+      {
+        title: 'Astra Streaming — Software Engineer',
+        stack: 'React · GraphQL · Apache Pulsar',
+        bullets: [
+          'Lead frontend engineer taking Astra Streaming from alpha to general availability.',
+          'Built a configuration framework powering the UI for 50+ Pulsar connectors; supported production on-call rotation for both Astra DB and Astra Streaming.',
+        ],
+      },
+    ],
+  },
+  {
+    company: 'Michaels',
+    location: 'Dallas, TX',
+    period: 'Aug 2020 — Mar 2021',
+    // No Michaels logo in any Iconify pack we have. User will drop an SVG
+    // at src/icons/michaels.svg later and we'll switch to icon: 'michaels'.
+    roles: [
+      {
+        title: 'Michaels.com — Frontend Engineer II',
+        stack: 'React · D3',
+        bullets: [
+          'Greenfield developer building a brand-new Michaels.com including an Etsy-like sellers’ platform.',
+          'Built a design system and led data-visualization engineering using D3 for seller reporting tools.',
+        ],
+      },
+    ],
+  },
+  {
+    company: 'Capital One',
+    location: 'Dallas, TX',
+    period: 'Jul 2017 — Aug 2020',
+    // Capital One isn't in simple-icons. Drop an SVG at src/icons/capital-one.svg
+    // and switch to icon: 'capital-one'.
+    roles: [
+      {
+        title: 'Dealer Navigator — Frontend Engineer',
+        stack: 'Angular · Node · AWS',
+        bullets: [
+          'Led and mentored a team of 2–3 contractors delivering a new design system and component library — responsive, pixel-perfect, accessible implementations across the platform.',
+          'Served as Lead Frontend Engineer on Dealer Navigator’s mobile-first intake tool, partnering with design from ideation through implementation.',
+          'Architected and launched a suite of microservice applications for the DFW market, modernizing legacy monolithic systems. Awarded the organization’s Diamond Award for speed and quality of development.',
+        ],
+      },
+    ],
+  },
+];
+
+type EducationItem = { title: string; detail: string; year: string; icon?: string };
+const education: EducationItem[] = [
+  {
+    title: 'University of Wisconsin–Madison',
+    detail: 'B.S. Computer Engineering & Computer Sciences (Double Major)',
+    year: 'May 2017',
+    icon: 'wisconsin',
+  },
+  {
+    title: 'AWS Certified Solutions Architect',
+    detail: 'Associate',
+    year: '',
+    icon: 'simple-icons:amazonwebservices',
+  },
+];
+
+type Skill = { name: string; icon?: string };
+const skills: { group: string; items: Skill[] }[] = [
+  {
+    group: 'Frontend',
+    items: [
+      { name: 'React', icon: 'simple-icons:react' },
+      { name: 'Next.js', icon: 'simple-icons:nextdotjs' },
+      { name: 'Angular', icon: 'simple-icons:angular' },
+      { name: 'TypeScript', icon: 'simple-icons:typescript' },
+      { name: 'Tailwind', icon: 'simple-icons:tailwindcss' },
+      { name: 'D3', icon: 'simple-icons:d3dotjs' },
+    ],
+  },
+  {
+    group: 'Backend',
+    items: [
+      { name: 'Python', icon: 'simple-icons:python' },
+      { name: 'Node', icon: 'simple-icons:nodedotjs' },
+      { name: 'GraphQL', icon: 'simple-icons:graphql' },
+    ],
+  },
+  {
+    group: 'AI & ML',
+    items: [
+      // No canonical logos for these — chips render text-only.
+      { name: 'MCP' },
+      { name: 'RAG' },
+      { name: 'Vector DBs' },
+      { name: 'Agentic Workflows' },
+      { name: 'LangChain', icon: 'simple-icons:langchain' },
+      { name: 'LlamaIndex' },
+    ],
+  },
+  {
+    group: 'Infrastructure',
+    items: [
+      { name: 'AWS', icon: 'simple-icons:amazonwebservices' },
+      { name: 'Docker', icon: 'simple-icons:docker' },
+      { name: 'Kubernetes', icon: 'simple-icons:kubernetes' },
+      { name: 'GitHub Actions', icon: 'simple-icons:githubactions' },
+    ],
+  },
+];
 ---
 
 <BaseLayout
   title="About"
-  description="About Mike Fortman — what I work on and what I care about."
+  description="About Mike Fortman — frontend engineer focused on design systems, performance, and AI dev tooling."
 >
-  <article class="mx-auto max-w-2xl px-6 py-16">
-    <h1 class="font-display text-4xl font-semibold tracking-tight">About</h1>
+  {/* Reading-progress bar — fixed at the very top of the viewport. Width is
+      driven by a CSS var set by the scroll listener below. */}
+  <div class="read-progress" aria-hidden="true"></div>
 
-    {/* TODO_USER: replace placeholder bio with the real one. */}
-    <div class="mt-8 space-y-5 text-text-muted">
-      <p>
-        I'm a frontend engineer with a full-stack background. I've spent the last several years
-        focused on the UI layer — design systems, component libraries, micro-frontends — because
-        that's where the work I find most satisfying lives.
-      </p>
-      <p>
-        Lately: design tokens that survive a rebrand, accessibility that isn't bolted on after a
-        Lighthouse run, and small, kinetic data viz with D3.
-      </p>
-      <p>
-        Computer Engineering & Computer Sciences at UW–Madison, class of '17. Originally from
-        Franklin, WI.
-      </p>
-    </div>
+  <article class="mx-auto max-w-3xl px-6 pt-12 pb-24">
+    {/* --- Summary -------------------------------------------------------- */}
+    <header data-reveal>
+      <p class="font-mono text-xs uppercase tracking-widest text-accent">About</p>
+      <h1 class="mt-2 font-display text-4xl font-semibold tracking-tight sm:text-5xl">
+        Frontend engineer in Dallas.
+      </h1>
+      <div class="mt-6 space-y-5 text-text-muted">
+        <p>
+          I'm a frontend engineer with a full-stack background. The last several years have lived
+          at the UI layer — design systems, component libraries, micro-frontends — because that's
+          where the work I find most satisfying happens.
+        </p>
+        <p>
+          Lately: design tokens that survive a rebrand, accessibility that isn't bolted on after a
+          Lighthouse run, and small, kinetic data viz with D3. Computer Engineering & Computer
+          Sciences at UW–Madison, class of '17.
+        </p>
+      </div>
+    </header>
 
-    <section class="mt-12">
-      <h2 class="font-display text-xl font-semibold tracking-tight">Currently</h2>
-      <ul class="mt-4 space-y-2 text-text-muted">
-        <li>
-          <span class="text-text">Building:</span> this site (Astro + Tailwind v4, token-first design system).
-        </li>
-        <li>
-          <span class="text-text">Reading:</span> <em>TODO_USER</em>
-        </li>
-        <li>
-          <span class="text-text">Learning:</span> <em>TODO_USER</em>
-        </li>
-      </ul>
+    {/* --- Experience timeline ------------------------------------------- */}
+    <section class="mt-20" aria-labelledby="experience-heading">
+      <h2 id="experience-heading" class="font-display text-2xl font-semibold tracking-tight" data-reveal>
+        Experience
+      </h2>
+
+      <ol class="timeline mt-8">
+        {
+          experience.map((job) => (
+            <li class="timeline-job" data-reveal>
+              {/* Sticky company header — pins while you scroll its bullets. */}
+              <header class="timeline-header">
+                <span class="timeline-dot" aria-hidden="true" />
+                {
+                  job.icon && (
+                    <span class="company-logo" aria-hidden="true">
+                      <Icon name={job.icon} />
+                    </span>
+                  )
+                }
+                <div class="min-w-0">
+                  <h3 class="font-display text-lg font-semibold tracking-tight text-text">
+                    {job.company}
+                  </h3>
+                  <p class="text-xs text-text-muted">
+                    {job.location} · {job.period}
+                  </p>
+                </div>
+              </header>
+
+              <ol class="timeline-roles">
+                {job.roles.map((role) => (
+                  <li class="role-card group" data-reveal>
+                    <div class="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+                      <h4 class="flex items-center gap-2 font-display text-base font-semibold tracking-tight text-text">
+                        {role.icon && (
+                          <span class="product-logo" aria-hidden="true">
+                            <Icon name={role.icon} />
+                          </span>
+                        )}
+                        <span>{role.title}</span>
+                      </h4>
+                      <span class="font-mono text-[11px] uppercase tracking-wider text-accent">
+                        {role.stack}
+                      </span>
+                    </div>
+                    <ul class="mt-3 space-y-2">
+                      {role.bullets.map((b) => (
+                        <li class="bullet text-sm leading-relaxed text-text-muted">
+                          <span class="bullet-dot" aria-hidden="true" />
+                          <span>{b}</span>
+                        </li>
+                      ))}
+                    </ul>
+                    {role.products && role.products.length > 0 && (
+                      <div class="mt-4 flex flex-wrap items-center gap-2">
+                        <span class="font-mono text-[10px] uppercase tracking-wider text-text-muted">
+                          Also built
+                        </span>
+                        <ul class="flex flex-wrap gap-1.5">
+                          {role.products.map((p) => (
+                            <li class="product-chip">
+                              {p.icon && (
+                                <span class="product-chip-icon" aria-hidden="true">
+                                  <Icon name={p.icon} />
+                                </span>
+                              )}
+                              <span>{p.name}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </li>
+                ))}
+              </ol>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+
+    {/* --- Education ----------------------------------------------------- */}
+    <section class="mt-20" aria-labelledby="education-heading">
+      <h2 id="education-heading" class="font-display text-2xl font-semibold tracking-tight" data-reveal>
+        Education & certifications
+      </h2>
+      <div class="mt-6 grid gap-4 sm:grid-cols-2" data-reveal>
+        {
+          education.map((e) => (
+            <div class="role-card flex items-start gap-3">
+              {e.icon && (
+                <span class="edu-logo" aria-hidden="true">
+                  <Icon name={e.icon} />
+                </span>
+              )}
+              <div class="min-w-0 flex-1">
+                <h3 class="font-display text-base font-semibold tracking-tight text-text">
+                  {e.title}
+                </h3>
+                <p class="mt-1 text-sm text-text-muted">{e.detail}</p>
+                {e.year && (
+                  <p class="mt-2 font-mono text-[11px] uppercase tracking-wider text-text-muted">
+                    {e.year}
+                  </p>
+                )}
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    {/* --- Skills -------------------------------------------------------- */}
+    <section class="mt-20" aria-labelledby="skills-heading">
+      <h2 id="skills-heading" class="font-display text-2xl font-semibold tracking-tight" data-reveal>
+        Technical skills
+      </h2>
+      <div class="mt-6 grid gap-6 sm:grid-cols-2" data-reveal>
+        {
+          skills.map((g) => (
+            <div class="skill-group">
+              <p class="font-mono text-[11px] uppercase tracking-wider text-accent">{g.group}</p>
+              <ul class="mt-3 flex flex-wrap gap-2">
+                {g.items.map((s) => (
+                  <li class="skill-chip">
+                    {s.icon && (
+                      <span class="skill-icon" aria-hidden="true">
+                        <Icon name={s.icon} />
+                      </span>
+                    )}
+                    <span>{s.name}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    {/* --- Contact CTA --------------------------------------------------- */}
+    <section class="mt-20" data-reveal>
+      <div class="role-card flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <h3 class="font-display text-lg font-semibold tracking-tight text-text">
+            Currently open to good problems.
+          </h3>
+          <p class="mt-1 text-sm text-text-muted">
+            Design systems, dev tooling, AI UX, anything with a real interaction layer.
+          </p>
+        </div>
+        <a
+          href="/contact"
+          class="inline-flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium text-white shadow transition-transform hover:-translate-y-0.5"
+          style="background-image: var(--gradient-primary);"
+        >
+          <span>Get in touch</span>
+          <span aria-hidden="true">→</span>
+        </a>
+      </div>
     </section>
   </article>
 </BaseLayout>
+
+<style>
+  /* --- Reading progress bar ------------------------------------------- */
+  .read-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 2px;
+    width: var(--read, 0%);
+    background-image: var(--gradient-primary);
+    z-index: 60;
+    transition: width 80ms linear;
+    pointer-events: none;
+  }
+
+  /* --- Scroll reveal -------------------------------------------------- */
+  [data-reveal] {
+    opacity: 0;
+    transform: translateY(14px);
+    transition:
+      opacity 600ms var(--ease-out),
+      transform 600ms var(--ease-out);
+  }
+  [data-reveal].revealed {
+    opacity: 1;
+    transform: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    [data-reveal] {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+    .read-progress {
+      transition: none;
+    }
+  }
+
+  /* --- Timeline ------------------------------------------------------- */
+  .timeline {
+    position: relative;
+    padding-left: 1.25rem;
+    list-style: none;
+  }
+  /* Vertical rail — sits under the dots. */
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 0.375rem;
+    top: 0.6rem;
+    bottom: 0.6rem;
+    width: 2px;
+    background: linear-gradient(
+      to bottom,
+      transparent 0,
+      var(--border) 24px,
+      var(--border) calc(100% - 24px),
+      transparent 100%
+    );
+  }
+
+  .timeline-job {
+    position: relative;
+    padding-bottom: 2.5rem;
+  }
+  .timeline-job:last-child {
+    padding-bottom: 0;
+  }
+
+  .timeline-header {
+    position: sticky;
+    top: 4rem; /* nav height (h-14) + a touch of breathing room */
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 0;
+    margin-left: -1.25rem;
+    padding-left: 1.25rem;
+    background: linear-gradient(
+      to bottom,
+      color-mix(in oklab, var(--bg) 92%, transparent),
+      color-mix(in oklab, var(--bg) 92%, transparent) 70%,
+      transparent 100%
+    );
+    backdrop-filter: blur(6px);
+  }
+
+  .timeline-dot {
+    position: absolute;
+    left: -0.125rem; /* center on rail (rail x=0.375rem, dot is 1rem wide) */
+    width: 0.875rem;
+    height: 0.875rem;
+    border-radius: 999px;
+    background-color: var(--bg);
+    border: 2px solid var(--border);
+    transition:
+      border-color var(--duration) var(--ease-out),
+      background-color var(--duration) var(--ease-out),
+      box-shadow var(--duration) var(--ease-out);
+  }
+  /* When the job has been revealed (in viewport), light up the dot. */
+  .timeline-job.revealed .timeline-dot {
+    border-color: var(--accent);
+    background-color: var(--accent);
+    box-shadow: 0 0 0 4px color-mix(in oklab, var(--accent) 18%, transparent);
+  }
+
+  .timeline-roles {
+    list-style: none;
+    margin-top: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  /* --- Role / generic content card ----------------------------------- */
+  .role-card {
+    position: relative;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    background-color: var(--surface);
+    padding: 1rem 1.125rem;
+    transition:
+      transform var(--duration) var(--ease-out),
+      border-color var(--duration) var(--ease-out),
+      box-shadow var(--duration) var(--ease-out);
+  }
+  .role-card:hover {
+    transform: translateY(-2px);
+    border-color: color-mix(in oklab, var(--accent) 45%, var(--border));
+    box-shadow: var(--shadow);
+  }
+  /* Accent rail that paints in on hover via clip-path width animation. */
+  .role-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius);
+    pointer-events: none;
+    background: linear-gradient(180deg, var(--accent), var(--accent-2));
+    opacity: 0;
+    transition: opacity var(--duration) var(--ease-out);
+    /* Reveal only a thin strip on the left edge. */
+    clip-path: inset(0 calc(100% - 3px) 0 0 round var(--radius));
+  }
+  .role-card:hover::before {
+    opacity: 0.9;
+  }
+
+  /* --- Bullet rows ---------------------------------------------------- */
+  .bullet {
+    display: grid;
+    grid-template-columns: 0.75rem 1fr;
+    gap: 0.625rem;
+    align-items: start;
+    padding: 0.125rem 0;
+    border-radius: var(--radius-sm);
+    transition: background-color var(--duration) var(--ease-out);
+  }
+  .bullet:hover {
+    background-color: color-mix(in oklab, var(--accent) 6%, transparent);
+  }
+  .bullet-dot {
+    margin-top: 0.55rem;
+    width: 0.375rem;
+    height: 0.375rem;
+    border-radius: 999px;
+    background-color: var(--text-muted);
+    transition: background-color var(--duration) var(--ease-out), transform var(--duration) var(--ease-out);
+  }
+  .bullet:hover .bullet-dot {
+    background-color: var(--accent);
+    transform: scale(1.4);
+  }
+
+  /* --- Skills chips --------------------------------------------------- */
+  .skill-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background-color: var(--surface);
+    padding: 0.25rem 0.75rem 0.25rem 0.5rem;
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+    transition:
+      transform var(--duration) var(--ease-out),
+      border-color var(--duration) var(--ease-out),
+      color var(--duration) var(--ease-out),
+      background-color var(--duration) var(--ease-out);
+    cursor: default;
+  }
+  .skill-chip:hover {
+    transform: translateY(-2px);
+    border-color: color-mix(in oklab, var(--accent) 55%, var(--border));
+    color: var(--text);
+    background-color: color-mix(in oklab, var(--accent) 10%, var(--surface));
+  }
+  .skill-icon {
+    display: inline-flex;
+    width: 0.95rem;
+    height: 0.95rem;
+    color: var(--text-muted);
+    transition: color var(--duration) var(--ease-out);
+  }
+  .skill-icon :global(svg) {
+    width: 100%;
+    height: 100%;
+  }
+  .skill-chip:hover .skill-icon {
+    color: var(--accent);
+  }
+
+  /* --- Company + education logos ------------------------------------- */
+  .company-logo {
+    display: inline-flex;
+    width: 1.75rem;
+    height: 1.75rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-sm);
+    background-color: var(--surface-2);
+    color: var(--text);
+    flex-shrink: 0;
+  }
+  .company-logo :global(svg) {
+    width: 70%;
+    height: 70%;
+  }
+
+  .edu-logo {
+    display: inline-flex;
+    width: 2.25rem;
+    height: 2.25rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-sm);
+    background-color: var(--surface-2);
+    color: var(--text);
+    flex-shrink: 0;
+    margin-top: 0.125rem;
+  }
+  .edu-logo :global(svg) {
+    width: 75%;
+    height: 75%;
+  }
+
+  /* --- Product logos (Langflow, OpenRAG, etc.) ---------------------- */
+  /* These are multicolor brand SVGs — do NOT set a `color` here, the icon
+     ships with its own fills (so Langflow stays magenta/violet, etc.).
+     The container only handles sizing and the small hover lift. */
+  .product-logo {
+    display: inline-flex;
+    width: 1.25rem;
+    height: 1.25rem;
+    flex-shrink: 0;
+    transition: transform var(--duration) var(--ease-spring);
+  }
+  .product-logo :global(svg) {
+    width: 100%;
+    height: 100%;
+  }
+  .role-card:hover .product-logo {
+    transform: scale(1.15) rotate(-4deg);
+  }
+
+  /* --- Product chips (under role bullets) ----------------------------- */
+  .product-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background-color: var(--bg);
+    padding: 0.2rem 0.625rem 0.2rem 0.5rem;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    transition:
+      border-color var(--duration) var(--ease-out),
+      color var(--duration) var(--ease-out);
+  }
+  .product-chip:hover {
+    border-color: color-mix(in oklab, var(--accent) 45%, var(--border));
+    color: var(--text);
+  }
+  .product-chip-icon {
+    display: inline-flex;
+    width: 0.9rem;
+    height: 0.9rem;
+    flex-shrink: 0;
+    color: var(--text); /* inherited by currentColor SVGs (like openrag) */
+  }
+  .product-chip-icon :global(svg) {
+    width: 100%;
+    height: 100%;
+  }
+</style>
+
+<script>
+  // Scroll reveal + reading progress. Re-binds on view transitions so this
+  // page works correctly when navigated to via ClientRouter.
+  function bindAboutPage() {
+    const article = document.querySelector<HTMLElement>('article');
+    const bar = document.querySelector<HTMLElement>('.read-progress');
+    if (!article || !bar) return;
+
+    // --- Reveal on enter ---
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const targets = Array.from(article.querySelectorAll<HTMLElement>('[data-reveal]'));
+
+    if (reduce) {
+      targets.forEach((el) => el.classList.add('revealed'));
+    } else {
+      const io = new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) {
+            if (e.isIntersecting) {
+              e.target.classList.add('revealed');
+              io.unobserve(e.target);
+            }
+          }
+        },
+        { rootMargin: '0px 0px -10% 0px', threshold: 0.05 },
+      );
+      targets.forEach((el) => io.observe(el));
+    }
+
+    // --- Reading progress ---
+    const update = () => {
+      const rect = article.getBoundingClientRect();
+      const total = rect.height - window.innerHeight;
+      if (total <= 0) {
+        bar.style.setProperty('--read', '100%');
+        return;
+      }
+      const scrolled = Math.min(Math.max(-rect.top, 0), total);
+      bar.style.setProperty('--read', `${(scrolled / total) * 100}%`);
+    };
+    update();
+    window.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+
+    // Cleanup on next swap so we don't stack listeners.
+    document.addEventListener(
+      'astro:before-swap',
+      () => {
+        window.removeEventListener('scroll', update);
+        window.removeEventListener('resize', update);
+      },
+      { once: true },
+    );
+  }
+
+  bindAboutPage();
+  document.addEventListener('astro:after-swap', bindAboutPage);
+</script>
