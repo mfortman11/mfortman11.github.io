@@ -1,49 +1,46 @@
 // Content collections — Astro 5/6 content layer API.
 //
-// `projects` uses the glob loader (one .md per case study) so each project
-// gets a markdown body. `pokemon` and `nba` use the file() loader pointed at
-// a single YAML file each — short blurbs don't need their own files.
+// All three collections use the file() loader pointed at a single YAML file —
+// keeps every case study / blurb in one place instead of a folder of stubs.
 //
 // Schemas validate at build time; mismatch fails the build with a precise
 // pointer to the offending entry.
 
 import { defineCollection } from 'astro:content';
 import { z } from 'astro:schema';
-import { glob, file } from 'astro/loaders';
+import { file } from 'astro/loaders';
 import yaml from 'yaml';
 
 const yamlParser = (text: string) => yaml.parse(text);
 
-const projects = defineCollection({
-  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/projects' }),
-  schema: ({ image }) =>
-    z.object({
-      title: z.string(),
-      // 1–2 sentences shown on the project card.
-      summary: z.string(),
-      // "Lead frontend", "Solo", etc.
-      role: z.string(),
-      year: z.number().int(),
-      tags: z.array(z.string()).default([]),
-      links: z
-        .array(
-          z.object({
-            label: z.string(),
-            url: z.string().url(),
-          }),
-        )
-        .default([]),
-      hero: z
-        .object({
-          src: image(),
-          alt: z.string(),
-        })
-        .optional(),
-      // Surface on home page.
-      featured: z.boolean().default(false),
-      // Manual sort override; lower comes first.
-      order: z.number().int().default(0),
-    }),
+const work = defineCollection({
+  loader: file('src/data/work.yml', { parser: yamlParser }),
+  schema: z.object({
+    title: z.string(),
+    // 1–2 sentences shown on the project card.
+    summary: z.string(),
+    // "Lead frontend", "Solo", etc.
+    role: z.string(),
+    year: z.number().int(),
+    tags: z.array(z.string()).default([]),
+    links: z
+      .array(
+        z.object({
+          label: z.string(),
+          url: z.string().url(),
+        }),
+      )
+      .default([]),
+    // Surface on home page.
+    featured: z.boolean().default(false),
+    // Manual sort override; lower comes first.
+    order: z.number().int().default(0),
+    // Case-study body. Free-form paragraphs + a bullet list. Inline markdown
+    // (bold, code) inside strings is rendered as-is by the detail page.
+    whatItIs: z.string(),
+    built: z.array(z.string()).default([]),
+    whatNext: z.string(),
+  }),
 });
 
 const pokemonType = z.enum([
@@ -103,4 +100,4 @@ const nba = defineCollection({
   }),
 });
 
-export const collections = { projects, pokemon, nba };
+export const collections = { work, pokemon, nba };

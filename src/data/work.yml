@@ -1,0 +1,191 @@
+# Work / case studies — single source of truth.
+#
+# Schema enforced in src/content.config.ts. Rendered by:
+#   - src/components/ProjectCard.astro (card on home + work index)
+#   - src/pages/work/[...slug].astro   (case-study detail page)
+#
+# `built` is the bullet list under "What I built". `whatItIs` and `whatNext`
+# are free-form paragraphs (use `>` for single-paragraph fold, `|` to preserve
+# line breaks).
+
+- id: openrag
+  title: OpenRAG
+  summary: >
+    An open-source platform for agentic RAG that orchestrates Langflow, OpenSearch,
+    and Docling in a single containerized stack — launched on IBM's watsonx.data platform.
+  role: Lead Engineer
+  year: 2024
+  tags: [Python, Docker, RAG, AI, Open Source]
+  links:
+    - label: GitHub
+      url: https://github.com/datastax/openrag
+  featured: true
+  order: 0
+  whatItIs: >
+    OpenRAG is an open-source, self-hostable platform for building agentic RAG
+    (Retrieval-Augmented Generation) pipelines. It wires together Langflow for
+    orchestration, OpenSearch for vector storage and retrieval, and Docling for
+    document ingestion into a single `docker compose up` experience. It shipped
+    as the reference architecture on IBM's watsonx.data platform.
+  built:
+    - >
+      **Full-stack architecture** — Designed the service topology: Langflow as the
+      orchestration layer, Docling for document parsing and chunking, OpenSearch
+      for hybrid (dense + sparse) vector search. Each service is containerized and
+      configured to talk to each other out of the box.
+    - >
+      **Developer experience** — The entire stack launches with a single command.
+      Built opinionated default flows in Langflow so new users can query their
+      documents immediately without building a pipeline from scratch.
+    - >
+      **IBM watsonx.data integration** — Worked with the watsonx team to package
+      OpenRAG as a launch offering, including adapting the vector store config to
+      support their managed infrastructure.
+    - >
+      **Open source release** — Authored the repo, documentation, and contribution
+      guides. Drove the public launch and community onboarding.
+  whatNext: >
+    Add a streaming evaluation harness so teams can benchmark retrieval quality
+    (precision, recall, RAGAS scores) against their own document sets before going
+    to production. Better observability into which chunks are being retrieved —
+    and why — would also make tuning retrieval parameters far less trial-and-error.
+
+- id: langflow
+  title: Langflow
+  summary: >
+    Led a 5-person frontend team to redesign and scale an open-source visual AI
+    builder from 20k to 140k GitHub stars — one of the most widely adopted AI
+    projects on GitHub.
+  role: Lead Frontend Engineer
+  year: 2024
+  tags: [React, Next.js, Python, Open Source, AI]
+  links:
+    - label: GitHub
+      url: https://github.com/langflow-ai/langflow
+    - label: Live
+      url: https://langflow.org
+  featured: true
+  order: 1
+  whatItIs: >
+    Langflow is a visual builder for agentic AI applications — a low-code canvas
+    where developers drag, drop, and wire together LLMs, tools, memory, and data
+    sources. It's used by thousands of developers and enterprise teams to prototype
+    and ship AI workflows.
+  built:
+    - >
+      **Full platform redesign** — Rebuilt Langflow's information architecture,
+      interaction patterns, and visual language from the ground up, transforming
+      a fragmented tool into a cohesive developer experience. The redesigned
+      product was featured on stage at NVIDIA GTC.
+    - >
+      **Canvas performance** — Revamped rendering on the React Flow canvas,
+      eliminating cascading rerenders and achieving ~40% improvement in interaction
+      latency. Key fix was isolating node state to prevent full-graph rerenders on
+      every edit.
+    - >
+      **Team leadership** — Led a frontend team of 5 engineers across feature
+      delivery, code quality, and design collaboration. Set craft standards and
+      ran design-eng pairing sessions to tighten the feedback loop with our design
+      team.
+    - >
+      **Growth** — Grew the repo from ~20k to over 140k GitHub stars, making
+      Langflow one of the most widely used open-source AI projects on GitHub.
+  whatNext: >
+    The canvas still has room for better multi-user collaboration (live cursors,
+    conflict-free edits). I'd also explore a tighter feedback loop between the
+    canvas and runtime — seeing live token streams inline on each node would make
+    debugging AI flows dramatically faster.
+
+- id: ai-ecosystem
+  title: AI Ecosystem & Integrations
+  summary: >
+    Sole engineer owning Astra DB vector search integrations across LangChain,
+    LlamaIndex, and Vercel — plus a GitHub Copilot extension that debuted at the
+    Microsoft Build keynote.
+  role: Senior Software Engineer
+  year: 2023
+  tags: [TypeScript, Vector Search, LangChain, LlamaIndex, AI]
+  links:
+    - label: LangChain Integration
+      url: https://python.langchain.com/docs/integrations/vectorstores/astradb
+    - label: LlamaIndex Integration
+      url: https://docs.llamaindex.ai/en/stable/examples/vector_stores/AstraDBIndexDemo
+  featured: true
+  order: 2
+  whatItIs: >
+    As the sole engineer owning DataStax's open-source AI ecosystem presence, I
+    built and maintained the vector store integrations that put Astra DB inside
+    the tools developers were already using — LangChain, LlamaIndex, and Vercel's
+    AI SDK. I also built a GitHub Copilot extension for Astra DB that launched at
+    Microsoft Build as one of 12 keynote partners.
+  built:
+    - >
+      **LangChain vector store** — Authored and maintained the `AstraDBVectorStore`
+      integration for LangChain, including similarity search, MMR retrieval,
+      metadata filtering, and async support. Kept it current through multiple
+      LangChain breaking-change releases.
+    - >
+      **LlamaIndex vector store** — Built the equivalent integration for
+      LlamaIndex, covering index creation, document upsert, and hybrid retrieval
+      modes against Astra DB's vector API.
+    - >
+      **Vercel AI SDK integration** — Built starter templates and an integration
+      layer for Vercel's AI SDK, making Astra DB a first-class retrieval backend
+      for Next.js AI apps.
+    - >
+      **GitHub Copilot extension** — Engineered a Copilot extension that lets
+      developers query and manage Astra DB collections in natural language
+      directly from their editor. Selected as one of 12 launch partners featured
+      at the Microsoft Build keynote.
+    - >
+      **Starter templates** — Authored production-ready starter repos across the
+      GenAI ecosystem so developers could go from zero to a working RAG app in
+      minutes.
+  whatNext: >
+    As the MCP protocol has matured, the Copilot extension pattern has a natural
+    successor: a proper MCP server for Astra DB that any tool (Cursor, Claude,
+    etc.) can plug into without a platform-specific integration. I'd rebuild it on
+    that foundation and deprecate the Copilot-specific layer.
+
+- id: astra-streaming
+  title: Astra Streaming
+  summary: >
+    Lead frontend engineer taking DataStax's managed Apache Pulsar service from
+    private alpha to general availability, including a configuration framework
+    powering the UI for 50+ connectors.
+  role: Software Engineer
+  year: 2022
+  tags: [React, GraphQL, Apache Pulsar]
+  links:
+    - label: Live
+      url: https://www.datastax.com/products/astra-streaming
+  featured: false
+  order: 3
+  whatItIs: >
+    Astra Streaming is DataStax's managed Apache Pulsar service — a cloud-native
+    event streaming platform. I joined when the product was in private alpha and
+    owned the frontend end-to-end through GA launch.
+  built:
+    - >
+      **Alpha to GA** — Sole lead frontend engineer across the full launch arc:
+      scoping, building, and shipping the core console UI from scratch through
+      general availability.
+    - >
+      **Connector configuration framework** — Designed and built a dynamic
+      configuration framework that drove the UI for 50+ Pulsar source and sink
+      connectors. Rather than hand-coding a form per connector, the framework
+      consumed a connector schema and generated the correct input types,
+      validation, and layout automatically.
+    - >
+      **On-call rotation** — Supported production on-call for both Astra Streaming
+      and Astra DB, giving me a ground-level view of the operational reality of
+      the platform I was building for.
+    - >
+      **GraphQL API integration** — Worked directly against the GraphQL layer to
+      surface tenant management, namespace config, topic stats, and connector
+      status in the UI.
+  whatNext: >
+    The connector framework was the right call but the schema format was a
+    one-off. I'd replace it with a JSON Schema–backed approach so any team adding
+    a connector gets validation, docs generation, and the UI form for free with no
+    custom work on the frontend side.

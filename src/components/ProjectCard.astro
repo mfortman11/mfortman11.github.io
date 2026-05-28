@@ -1,7 +1,7 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 
-type Props = { project: CollectionEntry<'projects'> };
+type Props = { project: CollectionEntry<'work'> };
 const { project } = Astro.props;
 const { title, summary, role, year, tags } = project.data;
 ---
