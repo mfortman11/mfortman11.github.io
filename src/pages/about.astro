@@ -13,14 +13,14 @@ import { Icon } from 'astro-icon/components';
 // - `icon: undefined` (or omitted) renders the chip without a glyph — used
 //   for skills like RAG/MCP that have no canonical logo.
 
-type Product = { name: string; icon?: string };
+type Tech = { name: string; icon?: string };
 type Role = {
   title: string;
-  stack: string;
+  tech: Tech[];
   bullets: string[];
   icon?: string;
-  /** Additional products/projects built during this role — render as chip row. */
-  products?: Product[];
+  /** Optional GitHub (or other) repo link rendered next to the title. */
+  repo?: string;
 };
 type Job = {
   company: string;
@@ -38,21 +38,46 @@ const experience: Job[] = [
     icon: 'simple-icons:ibm',
     roles: [
       {
+        title: 'OpenRAG — Lead Engineer',
+        icon: 'openrag',
+        repo: 'https://github.com/datastax/openrag',
+        tech: [
+          { name: 'Python', icon: 'simple-icons:python' },
+          { name: 'Next.js', icon: 'simple-icons:nextdotjs' },
+          { name: 'Docker', icon: 'simple-icons:docker' },
+          { name: 'OpenSearch', icon: 'simple-icons:opensearch' },
+          { name: 'Docling' },
+        ],
+        bullets: [
+          'Built OpenRAG, an open-source platform for agentic RAG, orchestrating containerized services including Langflow, OpenSearch, and Docling into a single `docker compose up` stack.',
+          'Designed the service topology and opinionated default flows so new users can query their documents immediately without building a pipeline from scratch.',
+          'Partnered with the IBM watsonx.data team to package OpenRAG as a launch offering, adapting vector store config to support their managed infrastructure.',
+          'Authored the repo, documentation, and contribution guides; drove the public launch and community onboarding.',
+        ],
+      },
+      {
         title: 'Langflow — Lead Frontend Engineer',
-        stack: 'React · Next.js · Python',
         icon: 'langflow',
-        products: [{ name: 'OpenRAG', icon: 'openrag' }],
+        repo: 'https://github.com/langflow-ai/langflow',
+        tech: [
+          { name: 'React', icon: 'simple-icons:react' },
+          { name: 'Python', icon: 'simple-icons:python' },
+        ],
         bullets: [
           'Led a frontend team of 5 engineers delivering Langflow to production for enterprise customers, partnering closely with design to set craft standards across the platform.',
           'Spearheaded a full platform redesign of Langflow — rebuilding information architecture, interaction patterns, and visual language to transform a fragmented tool into a cohesive, modern developer experience. Featured on stage at NVIDIA GTC.',
           'Revamped rendering performance on the React Flow canvas, eliminating unnecessary rerenders for a ~40% improvement in interaction latency.',
           'Grew Langflow from ~20k to over 140k GitHub stars, making it one of the most widely adopted open-source AI projects on GitHub.',
-          'Built OpenRAG, an open-source platform for agentic RAG, orchestrating containerized services including Langflow, OpenSearch, and Docling. Launched on IBM’s watsonx.data platform.',
         ],
       },
       {
         title: 'Gen AI & Ecosystems — Senior Software Engineer',
-        stack: 'TypeScript · Vector Search · LangChain · LlamaIndex',
+        tech: [
+          { name: 'TypeScript', icon: 'simple-icons:typescript' },
+          { name: 'Vector Search' },
+          { name: 'LangChain', icon: 'simple-icons:langchain' },
+          { name: 'LlamaIndex' },
+        ],
         bullets: [
           'Sole engineer owning OSS integrations of Astra DB vector search across Vercel, LangChain, and LlamaIndex.',
           'Authored and maintained vector-store integrations and starter templates across the GenAI ecosystem.',
@@ -61,7 +86,11 @@ const experience: Job[] = [
       },
       {
         title: 'Astra Streaming — Software Engineer',
-        stack: 'React · GraphQL · Apache Pulsar',
+        tech: [
+          { name: 'React', icon: 'simple-icons:react' },
+          { name: 'GraphQL', icon: 'simple-icons:graphql' },
+          { name: 'Apache Pulsar', icon: 'simple-icons:apachepulsar' },
+        ],
         bullets: [
           'Lead frontend engineer taking Astra Streaming from alpha to general availability.',
           'Built a configuration framework powering the UI for 50+ Pulsar connectors; supported production on-call rotation for both Astra DB and Astra Streaming.',
@@ -78,7 +107,10 @@ const experience: Job[] = [
     roles: [
       {
         title: 'Michaels.com — Frontend Engineer II',
-        stack: 'React · D3',
+        tech: [
+          { name: 'React', icon: 'simple-icons:react' },
+          { name: 'D3', icon: 'simple-icons:d3dotjs' },
+        ],
         bullets: [
           'Greenfield developer building a brand-new Michaels.com including an Etsy-like sellers’ platform.',
           'Built a design system and led data-visualization engineering using D3 for seller reporting tools.',
@@ -95,7 +127,11 @@ const experience: Job[] = [
     roles: [
       {
         title: 'Dealer Navigator — Frontend Engineer',
-        stack: 'Angular · Node · AWS',
+        tech: [
+          { name: 'Angular', icon: 'simple-icons:angular' },
+          { name: 'Node', icon: 'simple-icons:nodedotjs' },
+          { name: 'AWS', icon: 'simple-icons:amazonwebservices' },
+        ],
         bullets: [
           'Led and mentored a team of 2–3 contractors delivering a new design system and component library — responsive, pixel-perfect, accessible implementations across the platform.',
           'Served as Lead Frontend Engineer on Dealer Navigator’s mobile-first intake tool, partnering with design from ideation through implementation.',
@@ -229,7 +265,7 @@ const skills: { group: string; items: Skill[] }[] = [
               <ol class="timeline-roles">
                 {job.roles.map((role) => (
                   <li class="role-card group" data-reveal>
-                    <div class="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+                    <div class="flex items-start justify-between gap-3">
                       <h4 class="flex items-center gap-2 font-display text-base font-semibold tracking-tight text-text">
                         {role.icon && (
                           <span class="product-logo" aria-hidden="true">
@@ -238,10 +274,32 @@ const skills: { group: string; items: Skill[] }[] = [
                         )}
                         <span>{role.title}</span>
                       </h4>
-                      <span class="font-mono text-[11px] uppercase tracking-wider text-accent">
-                        {role.stack}
-                      </span>
+                      {role.repo && (
+                        <a
+                          href={role.repo}
+                          target="_blank"
+                          rel="noopener"
+                          class="repo-link"
+                          aria-label={`${role.title} GitHub repo`}
+                        >
+                          <Icon name="simple-icons:github" />
+                        </a>
+                      )}
                     </div>
+                    {role.tech.length > 0 && (
+                      <ul class="mt-2 flex flex-wrap gap-2">
+                        {role.tech.map((t) => (
+                          <li class="skill-chip">
+                            {t.icon && (
+                              <span class="skill-icon" aria-hidden="true">
+                                <Icon name={t.icon} />
+                              </span>
+                            )}
+                            <span>{t.name}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
                     <ul class="mt-3 space-y-2">
                       {role.bullets.map((b) => (
                         <li class="bullet text-sm leading-relaxed text-text-muted">
@@ -250,25 +308,6 @@ const skills: { group: string; items: Skill[] }[] = [
                         </li>
                       ))}
                     </ul>
-                    {role.products && role.products.length > 0 && (
-                      <div class="mt-4 flex flex-wrap items-center gap-2">
-                        <span class="font-mono text-[10px] uppercase tracking-wider text-text-muted">
-                          Also built
-                        </span>
-                        <ul class="flex flex-wrap gap-1.5">
-                          {role.products.map((p) => (
-                            <li class="product-chip">
-                              {p.icon && (
-                                <span class="product-chip-icon" aria-hidden="true">
-                                  <Icon name={p.icon} />
-                                </span>
-                              )}
-                              <span>{p.name}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
                   </li>
                 ))}
               </ol>
@@ -628,33 +667,24 @@ const skills: { group: string; items: Skill[] }[] = [
     transform: scale(1.15) rotate(-4deg);
   }
 
-  /* --- Product chips (under role bullets) ----------------------------- */
-  .product-chip {
+  /* --- Repo link (GitHub icon next to role title) --------------------- */
+  .repo-link {
     display: inline-flex;
+    width: 1.5rem;
+    height: 1.5rem;
     align-items: center;
-    gap: 0.375rem;
-    border-radius: 999px;
-    border: 1px solid var(--border);
-    background-color: var(--bg);
-    padding: 0.2rem 0.625rem 0.2rem 0.5rem;
-    font-size: 0.75rem;
+    justify-content: center;
     color: var(--text-muted);
-    transition:
-      border-color var(--duration) var(--ease-out),
-      color var(--duration) var(--ease-out);
-  }
-  .product-chip:hover {
-    border-color: color-mix(in oklab, var(--accent) 45%, var(--border));
-    color: var(--text);
-  }
-  .product-chip-icon {
-    display: inline-flex;
-    width: 0.9rem;
-    height: 0.9rem;
     flex-shrink: 0;
-    color: var(--text); /* inherited by currentColor SVGs (like openrag) */
+    transition:
+      color var(--duration) var(--ease-out),
+      transform var(--duration) var(--ease-out);
   }
-  .product-chip-icon :global(svg) {
+  .repo-link:hover {
+    color: var(--accent);
+    transform: translateY(-1px);
+  }
+  .repo-link :global(svg) {
     width: 100%;
     height: 100%;
   }

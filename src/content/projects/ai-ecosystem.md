@@ -1,4 +1,4 @@
----
+r---
 title: AI Ecosystem & Integrations
 summary: Sole engineer owning Astra DB vector search integrations across LangChain, LlamaIndex, and Vercel — plus a GitHub Copilot extension that debuted at the Microsoft Build keynote.
 role: Senior Software Engineer

@@ -5,8 +5,8 @@ import Gradient from '../components/Gradient.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import { socials } from '../lib/socials';
 
-const projects = await getCollection('projects');
-const featured = projects
+const entries = await getCollection('work');
+const featured = entries
   .filter((p) => p.data.featured)
   .sort((a, b) => a.data.order - b.data.order || b.data.year - a.data.year)
   .slice(0, 3);
@@ -75,7 +75,7 @@ const featured = projects
       ) : (
         <p class="mt-6 text-sm text-text-muted">
           Featured projects land here as soon as `featured: true` is set on entries under{' '}
-          <code class="font-mono text-xs">src/content/projects/</code>.
+          <code class="font-mono text-xs">src/data/work.yml</code>.
         </p>
       )
     }

@@ -1,19 +1,26 @@
 ---
-import { type CollectionEntry, getCollection, render } from 'astro:content';
+import { type CollectionEntry, getCollection } from 'astro:content';
 import ProseLayout from '../../layouts/ProseLayout.astro';
 
 export async function getStaticPaths() {
-  const projects = await getCollection('projects');
-  return projects.map((entry) => ({
+  const entries = await getCollection('work');
+  return entries.map((entry) => ({
     params: { slug: entry.id },
     props: { entry },
   }));
 }
 
-type Props = { entry: CollectionEntry<'projects'> };
+type Props = { entry: CollectionEntry<'work'> };
 const { entry } = Astro.props;
-const { Content } = await render(entry);
-const { title, summary, role, year, tags, links } = entry.data;
+const { title, summary, role, year, tags, links, whatItIs, built, whatNext } = entry.data;
+
+// Tiny inline-markdown renderer for **bold** and `code`. Headings/lists are
+// handled by the structured schema, so we only need these two inline marks.
+function inlineMd(s: string): string {
+  return s
+    .replace(/`([^`]+)`/g, '<code>$1</code>')
+    .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+}
 ---
 
 <ProseLayout title={title} description={summary}>
@@ -55,7 +62,17 @@ const { title, summary, role, year, tags, links } = entry.data;
   }
 
   <hr class="my-8 border-border" />
-  <Content />
+
+  <h2>What it is</h2>
+  <p set:html={inlineMd(whatItIs)} />
+
+  <h2>What I built</h2>
+  <ul>
+    {built.map((b) => <li set:html={inlineMd(b)} />)}
+  </ul>
+
+  <h2>What I'd do next</h2>
+  <p set:html={inlineMd(whatNext)} />
 
   <p class="mt-12 not-prose">
     <a href="/work" class="text-sm text-text-muted hover:text-accent">← All work</a>
