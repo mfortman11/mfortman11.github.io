@@ -13,7 +13,7 @@ links:
   - label: GitHub
     url: https://github.com/datastax/openrag
 featured: true
-order: 1
+order: 0
 ---
 
 ## What it is
