@@ -12,8 +12,7 @@
   role: Mixed Sweeper
   order: 1
   blurb: >
-    TODO_USER: 1–2 sentences on why this one — game you used it in,
-    favorite move, attitude, whatever sells it.
+    My all-time favorite. Great design, absurd move coverage, and you can snag him before the second gym.
 
 - id: heracross
   name: Heracross
@@ -23,7 +22,7 @@
   role: Physical Wallbreaker
   order: 2
   blurb: >
-    TODO_USER: 1–2 sentences on why this one.
+    Somehow cute and hits incredibly hard. Heracross was my favorite on Ash's team and Moxie makes him an absolute menace once he gets rolling.
 
 - id: starmie
   name: Starmie
@@ -33,7 +32,7 @@
   role: Special Sweeper / Spinner
   order: 3
   blurb: >
-    TODO_USER: 1–2 sentences on why this one.
+    Insane special coverage. I used Starmie to single-handedly dismantle Lance's entire team. The shiny doesn't hurt either.
 
 - id: hydreigon
   name: Hydreigon
@@ -43,7 +42,7 @@
   role: Special Sweeper
   order: 4
   blurb: >
-    TODO_USER: 1–2 sentences on why this one.
+    My favorite pseudo-legendary and the nod to King Ghidorah almost makes up for the grind to evolve him.
 
 - id: aerodactyl
   name: Aerodactyl
@@ -53,7 +52,7 @@
   role: Suicide Lead
   order: 5
   blurb: >
-    TODO_USER: 1–2 sentences on why this one.
+    My favorite fossil Pokémon. That first anime appearance was unforgettable and he's always a treat to get your hands on in any Gen 1 run.
 
 - id: ceruledge
   name: Ceruledge
@@ -63,4 +62,4 @@
   role: Setup Sweeper
   order: 6
   blurb: >
-    TODO_USER: 1–2 sentences on why this one.
+    Some love for the newer gens. One of the coolest designs in years and he looks like he walked straight out of Mega Man. Heavily used in my Scarlet/Violet playthrough.
