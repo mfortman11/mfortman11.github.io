@@ -1,33 +1,21 @@
 # NBA top 25 — single source of truth.
 #
 # Schema is enforced in src/content.config.ts. To reorder, edit the `rank:`
-# field on any entry (page sorts by rank ascending). Leave `consensusRank:`
-# alone so the page can show how far you've moved a player from consensus.
+# field on any entry (page sorts by rank ascending). `consensusRank:` reflects
+# where the broader basketball internet tends to put the player; the page
+# renders an arrow showing how far my rank diverges from it.
+#
+# Consensus baseline: B/R's Top 100 NBA Players of All Time, Ranked
+#   https://bleacherreport.com/articles/25223594-brs-top-100-nba-players-all-time-ranked
 #
 # `blurb:` supports paragraph breaks via blank lines (YAML `>` folds single
 # newlines to spaces).
 #
 # `photo:` is optional — drop a Wikimedia URL when you want to add one.
 
-- id: jordan
-  name: Michael Jordan
-  rank: 1
-  consensusRank: 1
-  era: 1980s–1990s
-  teams: [Chicago Bulls, Washington Wizards]
-  accolades:
-    - 6× NBA Champion
-    - 6× Finals MVP
-    - 5× MVP
-    - 10× scoring champion
-    - 14× All-Star
-  blurb: >
-    TODO_USER: 2–4 sentences. Why this rank, where you'd put them
-    vs. consensus, and the receipt that closes the case.
-
 - id: lebron
   name: LeBron James
-  rank: 2
+  rank: 1
   consensusRank: 2
   era: 2000s–2020s
   teams: [Cleveland Cavaliers, Miami Heat, Los Angeles Lakers]
@@ -38,7 +26,26 @@
     - All-time scoring leader
     - 20× All-Star
   blurb: >
-    TODO_USER
+    Greatest career of all time. Wherever he went, he won. Greatest floor
+    raiser, no question.
+
+- id: jordan
+  name: Michael Jordan
+  rank: 2
+  consensusRank: 1
+  era: 1980s–1990s
+  teams: [Chicago Bulls, Washington Wizards]
+  accolades:
+    - 6× NBA Champion
+    - 6× Finals MVP
+    - 5× MVP
+    - 10× scoring champion
+    - 14× All-Star
+  blurb: >
+    Combined freak athleticism with efficient scoring — we all know why he's
+    undoubtedly top 2. Having arguably the GOAT coach, sidekick, and running a
+    truly game-changing system in the triangle made life a lot easier for him
+    than, say, LeBron had.
 
 - id: kareem
   name: Kareem Abdul-Jabbar
@@ -52,82 +59,13 @@
     - 6× MVP
     - 19× All-Star
   blurb: >
-    TODO_USER
-
-- id: russell
-  name: Bill Russell
-  rank: 4
-  consensusRank: 4
-  era: 1950s–1960s
-  teams: [Boston Celtics]
-  accolades:
-    - 11× NBA Champion
-    - 5× MVP
-    - 12× All-Star
-    - Greatest winner in team-sport history
-  blurb: >
-    TODO_USER
-
-- id: magic
-  name: Magic Johnson
-  rank: 5
-  consensusRank: 5
-  era: 1980s
-  teams: [Los Angeles Lakers]
-  accolades:
-    - 5× NBA Champion
-    - 3× Finals MVP
-    - 3× MVP
-    - 12× All-Star
-  blurb: >
-    TODO_USER
-
-- id: bird
-  name: Larry Bird
-  rank: 6
-  consensusRank: 6
-  era: 1980s
-  teams: [Boston Celtics]
-  accolades:
-    - 3× NBA Champion
-    - 2× Finals MVP
-    - 3× MVP
-    - 12× All-Star
-  blurb: >
-    TODO_USER
-
-- id: wilt
-  name: Wilt Chamberlain
-  rank: 7
-  consensusRank: 7
-  era: 1960s–1970s
-  teams: [Philadelphia / SF Warriors, Philadelphia 76ers, Los Angeles Lakers]
-  accolades:
-    - 2× NBA Champion
-    - 4× MVP
-    - 100-point game
-    - 13× All-Star
-  blurb: >
-    TODO_USER
-
-- id: duncan
-  name: Tim Duncan
-  rank: 8
-  consensusRank: 8
-  era: 2000s–2010s
-  teams: [San Antonio Spurs]
-  accolades:
-    - 5× NBA Champion
-    - 3× Finals MVP
-    - 2× MVP
-    - 15× All-Star
-  blurb: >
-    TODO_USER
+    Only career to rival LeBron's — he was the best in HS, college, and the
+    NBA, plus longevity.
 
 - id: shaq
   name: Shaquille O'Neal
-  rank: 9
-  consensusRank: 9
+  rank: 4
+  consensusRank: 6
   era: 1990s–2000s
   teams: [Orlando Magic, Los Angeles Lakers, Miami Heat]
   accolades:
@@ -136,12 +74,28 @@
     - 1× MVP
     - 15× All-Star
   blurb: >
-    TODO_USER
+    Maybe the most dominant peak of all time. The main reason (along with
+    LeBron) that Kobe and Duncan were rarely ever considered the best player
+    in the league in any given year.
+
+- id: duncan
+  name: Tim Duncan
+  rank: 5
+  consensusRank: 7
+  era: 2000s–2010s
+  teams: [San Antonio Spurs]
+  accolades:
+    - 5× NBA Champion
+    - 3× Finals MVP
+    - 2× MVP
+    - 15× All-Star
+  blurb: >
+    Elite longevity, ultimate team player, with an underrated peak.
 
 - id: kobe
   name: Kobe Bryant
-  rank: 10
-  consensusRank: 10
+  rank: 6
+  consensusRank: 11
   era: 2000s–2010s
   teams: [Los Angeles Lakers]
   accolades:
@@ -151,12 +105,72 @@
     - 18× All-Star
     - 81-point game
   blurb: >
-    TODO_USER
+    Just behind Duncan and Shaq. Slightly dragged down due to efficiency and
+    being Robin to Shaq's Batman.
+
+- id: bird
+  name: Larry Bird
+  rank: 7
+  consensusRank: 8
+  era: 1980s
+  teams: [Boston Celtics]
+  accolades:
+    - 3× NBA Champion
+    - 2× Finals MVP
+    - 3× MVP
+    - 12× All-Star
+  blurb: >
+    Gets the edge over Magic thanks to lesser teams. Better defender and a
+    shooter ahead of his time.
+
+- id: magic
+  name: Magic Johnson
+  rank: 8
+  consensusRank: 4
+  era: 1980s
+  teams: [Los Angeles Lakers]
+  accolades:
+    - 5× NBA Champion
+    - 3× Finals MVP
+    - 3× MVP
+    - 12× All-Star
+  blurb: >
+    Bird gets the edge — he didn't have Kareem and Worthy. But arguably the
+    best passer of all time and a true Swiss army knife.
+
+- id: russell
+  name: Bill Russell
+  rank: 9
+  consensusRank: 5
+  era: 1950s–1960s
+  teams: [Boston Celtics]
+  accolades:
+    - 11× NBA Champion
+    - 5× MVP
+    - 12× All-Star
+    - Greatest winner in team-sport history
+  blurb: >
+    11 rings — we all know it. Can't go higher since the league had 8 teams.
+
+- id: curry
+  name: Stephen Curry
+  rank: 10
+  consensusRank: 10
+  era: 2010s–2020s
+  teams: [Golden State Warriors]
+  accolades:
+    - 4× NBA Champion
+    - 1× Finals MVP
+    - 2× MVP (one unanimous)
+    - All-time 3-point leader
+  blurb: >
+    Greatest shooter of all time. An all-time ceiling raiser — if doing a
+    1-on-1 draft for an all-time team, he's my top pick.
 
 - id: hakeem
   name: Hakeem Olajuwon
   rank: 11
-  consensusRank: 11
+  consensusRank: 12
   era: 1980s–1990s
   teams: [Houston Rockets, Toronto Raptors]
   accolades:
@@ -167,37 +181,24 @@
   blurb: >
     TODO_USER
 
-- id: curry
-  name: Stephen Curry
+- id: wilt
+  name: Wilt Chamberlain
   rank: 12
-  consensusRank: 12
-  era: 2010s–2020s
-  teams: [Golden State Warriors]
-  accolades:
-    - 4× NBA Champion
-    - 1× Finals MVP
-    - 2× MVP (one unanimous)
-    - All-time 3-point leader
-  blurb: >
-    TODO_USER
-
-- id: oscar
-  name: Oscar Robertson
-  rank: 13
-  consensusRank: 13
+  consensusRank: 9
   era: 1960s–1970s
-  teams: [Cincinnati Royals, Milwaukee Bucks]
+  teams: [Philadelphia / SF Warriors, Philadelphia 76ers, Los Angeles Lakers]
   accolades:
-    - 1× NBA Champion
-    - 1× MVP
-    - First averaged triple-double season
+    - 2× NBA Champion
+    - 4× MVP
+    - 100-point game
+    - 13× All-Star
   blurb: >
     TODO_USER
 
 - id: durant
   name: Kevin Durant
-  rank: 14
-  consensusRank: 14
+  rank: 13
+  consensusRank: 13
   era: 2010s–2020s
   teams: [OKC / Seattle, Golden State Warriors, Brooklyn Nets, Phoenix Suns]
   accolades:
@@ -208,9 +209,143 @@
   blurb: >
     TODO_USER
 
+- id: jokic
+  name: Nikola Jokić
+  rank: 14
+  consensusRank: 17
+  era: 2010s–2020s
+  teams: [Denver Nuggets]
+  accolades:
+    - 1× NBA Champion
+    - 1× Finals MVP
+    - 3× MVP
+  blurb: >
+    TODO_USER
+
+- id: moses
+  name: Moses Malone
+  rank: 15
+  consensusRank: 21
+  era: 1970s–1980s
+  teams: [Houston Rockets, Philadelphia 76ers, Washington Bullets]
+  accolades:
+    - 1× NBA Champion
+    - 1× Finals MVP
+    - 3× MVP
+    - "'Fo, Fo, Fo'"
+  blurb: >
+    TODO_USER
+
+- id: giannis
+  name: Giannis Antetokounmpo
+  rank: 16
+  consensusRank: 24
+  era: 2010s–2020s
+  teams: [Milwaukee Bucks]
+  accolades:
+    - 1× NBA Champion
+    - 1× Finals MVP
+    - 2× MVP
+    - 1× DPOY
+  blurb: >
+    TODO_USER
+
+- id: dirk
+  name: Dirk Nowitzki
+  rank: 17
+  consensusRank: 18
+  era: 2000s–2010s
+  teams: [Dallas Mavericks]
+  accolades:
+    - 1× NBA Champion
+    - 1× Finals MVP
+    - 1× MVP
+    - Stretch-four blueprint
+  blurb: >
+    TODO_USER
+
+- id: garnett
+  name: Kevin Garnett
+  rank: 18
+  consensusRank: 16
+  era: 1990s–2010s
+  teams: [Minnesota Timberwolves, Boston Celtics, Brooklyn Nets]
+  accolades:
+    - 1× NBA Champion
+    - 1× MVP
+    - 1× DPOY
+    - 15× All-Star
+  blurb: >
+    TODO_USER
+
+- id: pippen
+  name: Scottie Pippen
+  rank: 19
+  consensusRank: 28
+  era: 1980s–2000s
+  teams: [Chicago Bulls, Portland Trail Blazers, Houston Rockets]
+  accolades:
+    - 6× NBA Champion
+    - 7× All-Star
+    - 10× All-Defensive
+  blurb: >
+    TODO_USER
+
+- id: kawhi
+  name: Kawhi Leonard
+  rank: 20
+  consensusRank: 32
+  era: 2010s–2020s
+  teams: [San Antonio Spurs, Toronto Raptors, Los Angeles Clippers]
+  accolades:
+    - 2× NBA Champion
+    - 2× Finals MVP
+    - 2× DPOY
+  blurb: >
+    TODO_USER
+
+- id: cp3
+  name: Chris Paul
+  rank: 21
+  consensusRank: 30
+  era: 2000s–2020s
+  teams: [New Orleans Hornets, Los Angeles Clippers, Houston Rockets, OKC Thunder, Phoenix Suns]
+  accolades:
+    - 12× All-Star
+    - 5× assists leader
+    - 6× steals leader
+  blurb: >
+    TODO_USER
+
+- id: barkley
+  name: Charles Barkley
+  rank: 22
+  consensusRank: 25
+  era: 1980s–1990s
+  teams: [Philadelphia 76ers, Phoenix Suns, Houston Rockets]
+  accolades:
+    - 1× MVP
+    - 11× All-Star
+    - Greatest 6'4" rebounder ever
+  blurb: >
+    TODO_USER
+
+- id: oscar
+  name: Oscar Robertson
+  rank: 23
+  consensusRank: 14
+  era: 1960s–1970s
+  teams: [Cincinnati Royals, Milwaukee Bucks]
+  accolades:
+    - 1× NBA Champion
+    - 1× MVP
+    - First averaged triple-double season
+  blurb: >
+    TODO_USER
+
 - id: jerry-west
   name: Jerry West
-  rank: 15
+  rank: 24
   consensusRank: 15
   era: 1960s–1970s
   teams: [Los Angeles Lakers]
@@ -222,139 +357,15 @@
   blurb: >
     TODO_USER
 
-- id: doctor-j
-  name: Julius Erving
-  rank: 16
-  consensusRank: 16
-  era: 1970s–1980s
-  teams: [Virginia Squires (ABA), New York Nets (ABA), Philadelphia 76ers]
-  accolades:
-    - 1× NBA Champion
-    - 2× ABA Champion
-    - 3× ABA MVP
-    - 1× NBA MVP
-  blurb: >
-    TODO_USER
-
-- id: moses
-  name: Moses Malone
-  rank: 17
-  consensusRank: 17
-  era: 1970s–1980s
-  teams: [Houston Rockets, Philadelphia 76ers, Washington Bullets]
-  accolades:
-    - 1× NBA Champion
-    - 1× Finals MVP
-    - 3× MVP
-    - "'Fo, Fo, Fo'"
-  blurb: >
-    TODO_USER
-
-- id: garnett
-  name: Kevin Garnett
-  rank: 18
-  consensusRank: 18
-  era: 1990s–2010s
-  teams: [Minnesota Timberwolves, Boston Celtics, Brooklyn Nets]
-  accolades:
-    - 1× NBA Champion
-    - 1× MVP
-    - 1× DPOY
-    - 15× All-Star
-  blurb: >
-    TODO_USER
-
-- id: dirk
-  name: Dirk Nowitzki
-  rank: 19
-  consensusRank: 19
-  era: 2000s–2010s
-  teams: [Dallas Mavericks]
-  accolades:
-    - 1× NBA Champion
-    - 1× Finals MVP
-    - 1× MVP
-    - Stretch-four blueprint
-  blurb: >
-    TODO_USER
-
-- id: mailman
-  name: Karl Malone
-  rank: 20
-  consensusRank: 20
-  era: 1980s–2000s
-  teams: [Utah Jazz, Los Angeles Lakers]
-  accolades:
-    - 2× MVP
-    - 14× All-Star
-    - 2nd all-time scorer at retirement
-  blurb: >
-    TODO_USER
-
-- id: barkley
-  name: Charles Barkley
-  rank: 21
-  consensusRank: 21
-  era: 1980s–1990s
-  teams: [Philadelphia 76ers, Phoenix Suns, Houston Rockets]
-  accolades:
-    - 1× MVP
-    - 11× All-Star
-    - Greatest 6'4" rebounder ever
-  blurb: >
-    TODO_USER
-
-- id: stockton
-  name: John Stockton
-  rank: 22
-  consensusRank: 22
-  era: 1980s–2000s
-  teams: [Utah Jazz]
-  accolades:
-    - All-time assists leader
-    - All-time steals leader
-    - 10× All-Star
-  blurb: >
-    TODO_USER
-
-- id: d-rob
-  name: David Robinson
-  rank: 23
-  consensusRank: 23
-  era: 1980s–2000s
-  teams: [San Antonio Spurs]
-  accolades:
-    - 2× NBA Champion
-    - 1× MVP
-    - 1× DPOY
-    - 10× All-Star
-  blurb: >
-    TODO_USER
-
-- id: iverson
-  name: Allen Iverson
-  rank: 24
-  consensusRank: 24
-  era: 1990s–2000s
-  teams: [Philadelphia 76ers, Denver Nuggets]
-  accolades:
-    - 1× MVP
-    - 4× scoring champion
-    - 11× All-Star
-    - Cultural inflection point
-  blurb: >
-    TODO_USER
-
-- id: giannis
-  name: Giannis Antetokounmpo
+- id: wade
+  name: Dwyane Wade
   rank: 25
-  consensusRank: 25
-  era: 2010s–2020s
-  teams: [Milwaukee Bucks]
+  consensusRank: 23
+  era: 2000s–2010s
+  teams: [Miami Heat, Chicago Bulls, Cleveland Cavaliers]
   accolades:
-    - 1× NBA Champion
+    - 3× NBA Champion
     - 1× Finals MVP
-    - 2× MVP
-    - 1× DPOY
+    - 13× All-Star
   blurb: >
     TODO_USER
