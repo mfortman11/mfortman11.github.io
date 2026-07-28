@@ -14,13 +14,32 @@ import { Icon } from 'astro-icon/components';
 //   for skills like RAG/MCP that have no canonical logo.
 
 type Tech = { name: string; icon?: string };
+type HighlightKind = 'talk' | 'press' | 'launch' | 'recognition';
+type Highlight = {
+  title: string;
+  description?: string;
+  url: string;
+  kind: HighlightKind;
+  icon?: string;
+};
 type Role = {
   title: string;
   tech: Tech[];
-  bullets: string[];
+  summary: string;
+  accomplishments: string[];
   icon?: string;
   /** Optional GitHub (or other) repo link rendered next to the title. */
   repo?: string;
+  /** External proof links — talks, press, launches, recognition. */
+  highlights?: Highlight[];
+};
+
+// Iconify glyph per highlight kind — kept in one place so the JSX stays terse.
+const highlightIcon: Record<HighlightKind, string> = {
+  talk: 'simple-icons:youtube',
+  press: 'simple-icons:googlenews',
+  launch: 'simple-icons:rocket',
+  recognition: 'simple-icons:github',
 };
 type Job = {
   company: string;
@@ -48,11 +67,28 @@ const experience: Job[] = [
           { name: 'OpenSearch', icon: 'simple-icons:opensearch' },
           { name: 'Docling' },
         ],
-        bullets: [
+        summary:
           'Built OpenRAG, an open-source platform for agentic RAG, orchestrating containerized services including Langflow, OpenSearch, and Docling into a single `docker compose up` stack.',
+        accomplishments: [
           'Designed the service topology and opinionated default flows so new users can query their documents immediately without building a pipeline from scratch.',
           'Partnered with the IBM watsonx.data team to package OpenRAG as a launch offering, adapting vector store config to support their managed infrastructure.',
           'Authored the repo, documentation, and contribution guides; drove the public launch and community onboarding.',
+        ],
+        highlights: [
+          {
+            title: 'OpenRAG on IBM watsonx.data',
+            description:
+              'IBM launch announcement featuring OpenRAG as the foundation for grounding AI in governed enterprise knowledge.',
+            url: 'https://www.ibm.com/new/announcements/openrag-on-watsonx-data-ground-ai-in-governed-enterprise-knowledge',
+            kind: 'launch',
+            icon: 'simple-icons:ibm',
+          },
+          {
+            title: 'First podcast appearance',
+            description: 'Live conversation walking through OpenRAG and agentic RAG workflows.',
+            url: 'https://www.youtube.com/live/8RP6cZNC7kE?si=KVsIH3AegcmJaVOa',
+            kind: 'talk',
+          },
         ],
       },
       {
@@ -63,11 +99,22 @@ const experience: Job[] = [
           { name: 'React', icon: 'simple-icons:react' },
           { name: 'Python', icon: 'simple-icons:python' },
         ],
-        bullets: [
+        summary:
           'Led a frontend team of 5 engineers delivering Langflow to production for enterprise customers, partnering closely with design to set craft standards across the platform.',
+        accomplishments: [
           'Spearheaded a full platform redesign of Langflow — rebuilding information architecture, interaction patterns, and visual language to transform a fragmented tool into a cohesive, modern developer experience. Featured on stage at NVIDIA GTC.',
           'Revamped rendering performance on the React Flow canvas, eliminating unnecessary rerenders for a ~40% improvement in interaction latency.',
           'Grew Langflow from ~20k to over 140k GitHub stars, making it one of the most widely adopted open-source AI projects on GitHub.',
+        ],
+        highlights: [
+          {
+            title: 'Langflow 1.1 release',
+            description:
+              'Release announcement covering the redesign and platform improvements shipped in Langflow 1.1.',
+            url: 'https://www.langflow.org/blog/langflow-1-1-release-67c7528de7bcce001bb28072',
+            kind: 'launch',
+            icon: 'langflow',
+          },
         ],
       },
       {
@@ -78,10 +125,27 @@ const experience: Job[] = [
           { name: 'LangChain', icon: 'simple-icons:langchain' },
           { name: 'LlamaIndex' },
         ],
-        bullets: [
-          'Sole engineer owning OSS integrations of Astra DB vector search across Vercel, LangChain, and LlamaIndex.',
-          'Authored and maintained vector-store integrations and starter templates across the GenAI ecosystem.',
+        summary:
+          'Sole engineer owning OSS integrations of Astra DB vector search across Vercel, LangChain, and LlamaIndex — authoring and maintaining vector-store integrations and starter templates across the GenAI ecosystem.',
+        accomplishments: [
           'Built a GitHub Copilot extension letting developers query and manage Astra DB collections — one of 12 launch partners featured at the Microsoft Build keynote.',
+        ],
+        highlights: [
+          {
+            title: 'Top JS contributor to LangChain',
+            description:
+              'Recognized by the LangChain team as a top JavaScript contributor for work on the Astra DB vector-store integration.',
+            url: 'https://x.com/LangChain/status/1760700116997206145?s=20',
+            kind: 'recognition',
+            icon: 'simple-icons:x',
+          },
+          {
+            title: 'GitHub Copilot Extensions launch partner',
+            description:
+              'Built a GitHub Copilot extension letting developers query and manage Astra DB collections — one of 12 launch partners featured at the Microsoft Build keynote.',
+            url: 'https://github.blog/news-insights/product-news/introducing-github-copilot-extensions/',
+            kind: 'launch',
+          },
         ],
       },
       {
@@ -91,9 +155,19 @@ const experience: Job[] = [
           { name: 'GraphQL', icon: 'simple-icons:graphql' },
           { name: 'Apache Pulsar', icon: 'simple-icons:apachepulsar' },
         ],
-        bullets: [
+        summary:
           'Lead frontend engineer taking Astra Streaming from alpha to general availability.',
+        accomplishments: [
           'Built a configuration framework powering the UI for 50+ Pulsar connectors; supported production on-call rotation for both Astra DB and Astra Streaming.',
+        ],
+        highlights: [
+          {
+            title: 'Astra Streaming GA launch',
+            description:
+              'Shipped to general availability with built-in support for Kafka and RabbitMQ.',
+            url: 'https://www.businesswire.com/news/home/20220629005367/en/DataStaxs-Astra-Streaming-Goes-GA-With-New-Built-in-Support-for-Kafka-and-RabbitMQ',
+            kind: 'press',
+          },
         ],
       },
     ],
@@ -111,9 +185,19 @@ const experience: Job[] = [
           { name: 'React', icon: 'simple-icons:react' },
           { name: 'D3', icon: 'simple-icons:d3dotjs' },
         ],
-        bullets: [
+        summary:
           'Greenfield developer building a brand-new Michaels.com including an Etsy-like sellers’ platform.',
+        accomplishments: [
           'Built a design system and led data-visualization engineering using D3 for seller reporting tools.',
+        ],
+        highlights: [
+          {
+            title: 'Inside story: Michaels’ failed IT transformation',
+            description:
+              'Post-mortem on the Michaels.com rebuild — context for the short tenure.',
+            url: 'https://brittainladd.com/sheer-folly-the-inside-story-of-michaels-failed-it-transformation/',
+            kind: 'press',
+          },
         ],
       },
     ],
@@ -132,9 +216,10 @@ const experience: Job[] = [
           { name: 'Node', icon: 'simple-icons:nodedotjs' },
           { name: 'AWS', icon: 'simple-icons:amazonwebservices' },
         ],
-        bullets: [
-          'Led and mentored a team of 2–3 contractors delivering a new design system and component library — responsive, pixel-perfect, accessible implementations across the platform.',
+        summary:
           'Served as Lead Frontend Engineer on Dealer Navigator’s mobile-first intake tool, partnering with design from ideation through implementation.',
+        accomplishments: [
+          'Led and mentored a team of 2–3 contractors delivering a new design system and component library — responsive, pixel-perfect, accessible implementations across the platform.',
           'Architected and launched a suite of microservice applications for the DFW market, modernizing legacy monolithic systems. Awarded the organization’s Diamond Award for speed and quality of development.',
         ],
       },
@@ -300,14 +385,44 @@ const skills: { group: string; items: Skill[] }[] = [
                         ))}
                       </ul>
                     )}
-                    <ul class="mt-3 space-y-2">
-                      {role.bullets.map((b) => (
-                        <li class="bullet text-sm leading-relaxed text-text-muted">
-                          <span class="bullet-dot" aria-hidden="true" />
-                          <span>{b}</span>
-                        </li>
-                      ))}
-                    </ul>
+                    <p class="mt-3 text-sm leading-relaxed text-text-muted">{role.summary}</p>
+                    {role.accomplishments.length > 0 && (
+                      <ul class="mt-3 space-y-2">
+                        {role.accomplishments.map((b) => (
+                          <li class="bullet text-sm leading-relaxed text-text-muted">
+                            <span class="bullet-dot" aria-hidden="true" />
+                            <span>{b}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                    {role.highlights && role.highlights.length > 0 && (
+                      <div class="highlights">
+                        <p class="highlights-label">Highlights</p>
+                        <ul class="highlights-list">
+                          {role.highlights.map((h) => (
+                            <li>
+                              <a
+                                href={h.url}
+                                target="_blank"
+                                rel="noopener"
+                                class={`highlight-card highlight-${h.kind}`}
+                              >
+                                <span class="highlight-icon" aria-hidden="true">
+                                  <Icon name={h.icon ?? highlightIcon[h.kind]} />
+                                </span>
+                                <div class="highlight-body">
+                                  <p class="highlight-title">{h.title}</p>
+                                  {h.description && (
+                                    <p class="highlight-desc">{h.description}</p>
+                                  )}
+                                </div>
+                              </a>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
                   </li>
                 ))}
               </ol>
@@ -666,6 +781,108 @@ const skills: { group: string; items: Skill[] }[] = [
   .role-card:hover .product-logo {
     transform: scale(1.15) rotate(-4deg);
   }
+
+  /* --- Highlights (talks / press / launches / recognition) ----------- */
+  .highlights {
+    margin-top: 0.875rem;
+    padding-top: 0.75rem;
+    border-top: 1px dashed color-mix(in oklab, var(--border) 80%, transparent);
+  }
+  .highlights-label {
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-size: 0.6875rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+  }
+  .highlights-list {
+    list-style: none;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+  @media (min-width: 640px) {
+    .highlights-list {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  .highlight-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    height: 100%;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    background-color: var(--surface-2, var(--surface));
+    padding: 0.75rem 0.875rem;
+    color: var(--text);
+    text-decoration: none;
+    position: relative;
+    transition:
+      transform var(--duration) var(--ease-out),
+      border-color var(--duration) var(--ease-out),
+      background-color var(--duration) var(--ease-out),
+      box-shadow var(--duration) var(--ease-out);
+  }
+  .highlight-card::after {
+    content: '↗';
+    position: absolute;
+    top: 0.5rem;
+    right: 0.625rem;
+    color: var(--text-muted);
+    font-size: 0.8125rem;
+    transition: transform var(--duration) var(--ease-out), color var(--duration) var(--ease-out);
+  }
+  .highlight-card:hover {
+    transform: translateY(-2px);
+    border-color: color-mix(in oklab, var(--accent) 55%, var(--border));
+    background-color: color-mix(in oklab, var(--accent) 8%, var(--surface));
+    box-shadow: var(--shadow);
+  }
+  .highlight-card:hover::after {
+    color: var(--accent);
+    transform: translate(2px, -2px);
+  }
+  .highlight-icon {
+    display: inline-flex;
+    width: 1.75rem;
+    height: 1.75rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-sm);
+    background-color: color-mix(in oklab, var(--accent) 12%, transparent);
+    color: var(--accent);
+    flex-shrink: 0;
+    padding: 0.3125rem;
+    margin-top: 0.0625rem;
+    transition: color var(--duration) var(--ease-out), background-color var(--duration) var(--ease-out);
+  }
+  .highlight-icon :global(svg) {
+    width: 100%;
+    height: 100%;
+  }
+  .highlight-body {
+    min-width: 0;
+    flex: 1;
+  }
+  .highlight-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--text);
+    padding-right: 1rem; /* leave room for the ↗ */
+  }
+  .highlight-desc {
+    margin-top: 0.25rem;
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    color: var(--text-muted);
+  }
+  /* Per-kind icon tint. */
+  .highlight-card.highlight-talk .highlight-icon { color: #ff0033; background-color: color-mix(in oklab, #ff0033 12%, transparent); }
+  .highlight-card.highlight-press .highlight-icon { color: #4285f4; background-color: color-mix(in oklab, #4285f4 12%, transparent); }
+  .highlight-card.highlight-recognition .highlight-icon { color: var(--accent-2, var(--accent)); background-color: color-mix(in oklab, var(--accent-2, var(--accent)) 12%, transparent); }
 
   /* --- Repo link (GitHub icon next to role title) --------------------- */
   .repo-link {
