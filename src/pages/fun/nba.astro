@@ -26,6 +26,14 @@ const players = (await getCollection('nba')).sort((a, b) => a.data.rank - b.data
         B/R's Top 100 NBA Players of All Time, Ranked
       </a>
     </p>
+    <p class="mt-1 text-xs text-text-muted">
+      <a
+        href="/fun/nba-guide"
+        class="underline decoration-border underline-offset-2 transition-colors hover:text-accent hover:decoration-accent"
+      >
+        How this list gets built →
+      </a>
+    </p>
 
     <ol class="mt-10 flex flex-col gap-4">
       {players.map((entry) => <li><PlayerCard entry={entry} /></li>)}

@@ -1,0 +1,269 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const players = (await getCollection('nba')).sort((a, b) => a.data.rank - b.data.rank);
+
+const POSITIONS = ['PG', 'SG', 'SF', 'PF', 'C'] as const;
+const POSITION_LABEL: Record<(typeof POSITIONS)[number], string> = {
+  PG: 'Point Guard',
+  SG: 'Shooting Guard',
+  SF: 'Small Forward',
+  PF: 'Power Forward',
+  C: 'Center',
+};
+
+// Depth chart: everyone grouped by position, in rank order — PG1 is my
+// highest-ranked point guard, PG2 the next, and so on. This is "phase one" of
+// the guide below: settle each position before touching the overall list.
+const byPosition = Object.fromEntries(
+  POSITIONS.map((pos) => [pos, players.filter((p) => p.data.position === pos)]),
+) as Record<(typeof POSITIONS)[number], typeof players>;
+
+const cards = players.map((entry) => {
+  const pos = entry.data.position;
+  const depthIndex = byPosition[pos].findIndex((p) => p.id === entry.id) + 1;
+  const posColumn = POSITIONS.indexOf(pos) + 1;
+  return {
+    entry,
+    depthLabel: `${pos}${depthIndex}`,
+    style:
+      `--grouped-col:${posColumn};--grouped-row:${depthIndex};` +
+      `--ranked-row:${entry.data.rank};view-transition-name:player-${entry.id};`,
+  };
+});
+---
+
+<BaseLayout
+  title="Building the NBA top 25"
+  description="How the position depth chart and era duels turn into one ranked list — with a live demo."
+>
+  <section class="mx-auto max-w-4xl px-6 py-16">
+    <a
+      href="/fun/nba"
+      class="text-sm text-text-muted underline decoration-border underline-offset-2 transition-colors hover:text-accent hover:decoration-accent"
+    >
+      ← Back to the top 25
+    </a>
+
+    <p class="mt-6 text-sm font-medium uppercase tracking-widest text-accent">Off the clock</p>
+    <h1 class="mt-2 font-display text-4xl font-semibold tracking-tight">
+      How the top 25 actually gets built
+    </h1>
+    <p class="mt-3 max-w-2xl text-text-muted">
+      Ranking 25 players across seven decades directly is hopeless — you end up comparing a 1960s
+      center to a 2020s point guard with nothing in common. Two phases make it tractable instead.
+    </p>
+
+    <ol class="mt-8 max-w-2xl list-decimal space-y-2 pl-5 text-text-muted">
+      <li>
+        <strong class="text-text">Position battles.</strong> Build a depth chart — every point guard
+        stacked against every other point guard, same for each position. Comparable skill sets,
+        comparable roles.
+      </li>
+      <li>
+        <strong class="text-text">Era duels.</strong> Where two or three players overlapped and both
+        have a real case for "best in the league right now," settle it head-to-head before merging
+        everyone into one list.
+      </li>
+    </ol>
+
+    <h2 class="mt-14 font-display text-2xl font-semibold tracking-tight">Phase 1: the depth chart</h2>
+    <p class="mt-2 max-w-2xl text-text-muted">
+      Same 25 players as the top 25, just sorted into position groups first. Hit the button to watch
+      them merge back into the actual ranking.
+    </p>
+
+    <div class="mt-6 flex justify-center">
+      <button
+        type="button"
+        id="roster-toggle"
+        class="rounded border border-accent bg-accent/10 px-4 py-2 text-sm font-medium text-accent transition-colors hover:bg-accent/20"
+      >
+        Merge into final ranking
+      </button>
+    </div>
+
+    <div class="roster-scroll mt-8 overflow-x-auto">
+      <div class="roster-wrap grouped">
+        <div class="grouped-headers">
+          {POSITIONS.map((pos) => <div class="grouped-header">{POSITION_LABEL[pos]}</div>)}
+        </div>
+        <ul class="roster">
+          {
+            cards.map(({ entry, depthLabel, style }) => (
+              <li class="roster-card" style={style}>
+                <span class="roster-depth">{depthLabel}</span>
+                <span class="roster-rank">#{entry.data.rank}</span>
+                <span class="roster-name">{entry.data.name}</span>
+                <span class="roster-era">{entry.data.era}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+    <p class="mt-3 text-center text-xs text-text-muted">
+      Runs on the View Transitions API — same static HTML/CSS/JS GitHub Pages already serves, no
+      server needed. Falls back to an instant snap if a browser (or reduced-motion setting) doesn't
+      support it.
+    </p>
+
+    <h2 class="mt-14 font-display text-2xl font-semibold tracking-tight">Phase 2: era duels</h2>
+    <p class="mt-2 max-w-2xl text-text-muted">
+      The depth chart still leaves ties — players who overlapped and both have a real claim to "best
+      in the league" in a given stretch. Two of those calls, straight from the reasoning already
+      behind the rankings above:
+    </p>
+
+    <div class="mt-6 grid gap-4 sm:grid-cols-2">
+      <div class="rounded-lg border border-border bg-surface p-5">
+        <p class="font-mono text-xs uppercase tracking-widest text-text-muted">1980s · SF/PG</p>
+        <h3 class="mt-1 font-display text-lg font-semibold tracking-tight">Bird vs. Magic</h3>
+        <p class="mt-2 text-sm leading-relaxed text-text-muted">
+          Bird gets the nod (#7 vs. #8) — better defender, ahead-of-his-time shooter, and did it with
+          lesser teams around him. Magic's case is the best-passer-ever argument and a Swiss-army-knife
+          game; he just never had to do it without Kareem and Worthy next to him.
+        </p>
+      </div>
+      <div class="rounded-lg border border-border bg-surface p-5">
+        <p class="font-mono text-xs uppercase tracking-widest text-text-muted">2000s · C/PF/SG</p>
+        <h3 class="mt-1 font-display text-lg font-semibold tracking-tight">Shaq vs. Duncan vs. Kobe</h3>
+        <p class="mt-2 text-sm leading-relaxed text-text-muted">
+          Landed #4, #5, #6 — in that order, back-to-back. Shaq's peak was the most dominant of the
+          three, which is exactly why neither Duncan nor Kobe was ever really considered the best
+          player in the league in a given year despite both being inner-circle greats. Duncan edges
+          Kobe on longevity and two-way impact; Kobe's efficiency and playing Robin to Shaq's Batman
+          cost him the last half-step.
+        </p>
+      </div>
+    </div>
+
+    <p class="mt-10 max-w-2xl text-text-muted">
+      Do that for every position and every overlapping era, merge the results by rank, and you get
+      the <a href="/fun/nba" class="underline decoration-border underline-offset-2 hover:text-accent hover:decoration-accent">top 25</a>.
+    </p>
+  </section>
+</BaseLayout>
+
+<style>
+  .grouped-headers {
+    display: none;
+    grid-template-columns: repeat(5, minmax(9rem, 1fr));
+    gap: 0.5rem 0.75rem;
+    margin-bottom: 0.5rem;
+  }
+  .roster-wrap.grouped .grouped-headers {
+    display: grid;
+  }
+  .grouped-header {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    text-align: center;
+  }
+
+  .roster {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+    max-width: 32rem;
+    margin-inline: auto;
+    padding: 0;
+    list-style: none;
+  }
+  .roster-wrap.grouped .roster {
+    grid-template-columns: repeat(5, minmax(9rem, 1fr));
+    max-width: none;
+    margin-inline: 0;
+    gap: 0.5rem 0.75rem;
+  }
+
+  .roster-card {
+    grid-column: 1;
+    grid-row: var(--ranked-row);
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    gap: 0.5rem;
+    overflow: hidden;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    background-color: var(--surface);
+    padding: 0.4rem 0.6rem;
+  }
+  .roster-wrap.grouped .roster-card {
+    grid-column: var(--grouped-col);
+    grid-row: var(--grouped-row);
+  }
+
+  .roster-depth {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+  .roster-rank {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    color: var(--text-muted);
+    flex-shrink: 0;
+  }
+  .roster-name {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 0.8125rem;
+    font-weight: 500;
+  }
+  .roster-era {
+    margin-left: auto;
+    flex-shrink: 0;
+    font-size: 0.6875rem;
+    color: var(--text-muted);
+  }
+  .roster-wrap.grouped .roster-era {
+    display: none;
+  }
+
+  ::view-transition-group(*) {
+    animation-duration: var(--duration-slow);
+    animation-timing-function: var(--ease-out);
+  }
+</style>
+
+<script>
+  function bindRosterToggle() {
+    const wrap = document.querySelector<HTMLElement>('.roster-wrap');
+    const button = document.getElementById('roster-toggle');
+    if (!wrap || !button || button.dataset.bound === 'true') return;
+    button.dataset.bound = 'true';
+
+    let grouped = true;
+    const setLabel = () => {
+      button.textContent = grouped ? 'Merge into final ranking' : 'Split into position groups';
+    };
+    setLabel();
+
+    button.addEventListener('click', () => {
+      grouped = !grouped;
+      const apply = () => {
+        wrap.classList.toggle('grouped', grouped);
+        setLabel();
+      };
+
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (!reducedMotion && document.startViewTransition) {
+        document.startViewTransition(apply);
+      } else {
+        apply();
+      }
+    });
+  }
+
+  bindRosterToggle();
+  document.addEventListener('astro:after-swap', bindRosterToggle);
+</script>
