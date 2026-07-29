@@ -21,32 +21,20 @@ const { title, description, image, canonical } = Astro.props;
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="icon" href="/favicon.ico" />
-
-    {/* No-flash theme script — runs synchronously on hard load AND on every
-        ClientRouter view-transition swap (Astro replaces <html> attributes on
-        swap, so the `dark` class set on first load gets wiped without this). */}
-    <script is:inline>
-      (() => {
-        const applyTheme = () => {
-          try {
-            const stored = localStorage.getItem('theme');
-            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-            const isDark = stored === 'dark' || (!stored && prefersDark);
-            document.documentElement.classList.toggle('dark', isDark);
-          } catch {
-            /* localStorage blocked — fall back to default (light) */
-          }
-        };
-        applyTheme();
-        // Re-apply on every view transition. Listener is idempotent — adding
-        // it again on the next head injection is fine, but the inline script
-        // only runs once per real page boot since ClientRouter doesn't
-        // re-execute is:inline scripts on swap. Hence the dual approach.
-        document.addEventListener('astro:after-swap', applyTheme);
-      })();
-    </script>
+    <link rel="icon" type="image/svg+xml" href="/favicon-mf.svg" />
+    <link
+      rel="preconnect"
+      href="https://fonts.googleapis.com"
+    />
+    <link
+      rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin=""
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap"
+    />
 
     <SEO title={title} description={description} image={image} canonical={canonical} />
     <ClientRouter />

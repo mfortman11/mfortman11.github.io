@@ -1,104 +1,101 @@
 ---
-import ThemeToggle from './ThemeToggle.astro';
-import { siteName } from '../lib/seo';
-
 const links = [
-  { href: '/', label: 'Home' },
-  { href: '/about', label: 'About' },
-  { href: '/fun', label: 'Fun' },
-  { href: '/contact', label: 'Contact' },
+  { href: '/',        label: 'Home',    section: 'pro' },
+  { href: '/work',    label: 'Work',    section: 'pro' },
+  { href: '/about',   label: 'About',   section: 'pro' },
+  { href: '/fun',     label: 'Fun',     section: 'fun' },
+  { href: '/contact', label: 'Contact', section: 'pro' },
 ];
 
-// `pathname` lets the active-link styling work even under view transitions
-// since the markup is re-rendered per page.
 const pathname = Astro.url.pathname.replace(/\/$/, '') || '/';
 const isActive = (href: string) => (href === '/' ? pathname === '/' : pathname.startsWith(href));
 ---
 
 <header
-  class="sticky top-0 z-50 border-b border-border/60 bg-bg/70 backdrop-blur supports-[backdrop-filter]:bg-bg/55"
+  class="sticky top-0 z-50"
+  style="background: rgba(10,10,15,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.06);"
 >
-  <nav class="mx-auto flex h-14 max-w-5xl items-center justify-between px-6" aria-label="Primary">
-    <a
-      href="/"
-      class="font-display text-sm font-semibold tracking-tight text-text hover:text-accent"
-    >
-      {siteName}
+  <nav
+    class="mx-auto flex items-center justify-between max-w-5xl"
+    style="padding: 14px 48px;"
+    aria-label="Primary"
+  >
+    {/* Logo: mf_ */}
+    <a href="/" class="font-mono text-base font-bold leading-none" style="text-decoration: none;">
+      <span style="color: #22d3ee;">mf</span><span style="color: #555;">_</span>
     </a>
 
     {/* Desktop links */}
-    <ul class="hidden items-center gap-1 md:flex">
+    <ul class="hidden items-center md:flex" style="gap: 28px; list-style: none; margin: 0; padding: 0;">
       {
-        links.slice(1).map((l) => (
-          <li>
-            <a
-              href={l.href}
-              aria-current={isActive(l.href) ? 'page' : undefined}
-              class:list={[
-                'rounded px-3 py-1.5 text-sm transition-colors',
-                isActive(l.href)
-                  ? 'text-text'
-                  : 'text-text-muted hover:bg-surface-2 hover:text-text',
-              ]}
-            >
-              {l.label}
-              {isActive(l.href) && (
-                <span class="ml-1 inline-block h-1 w-1 rounded-full bg-accent align-middle" />
-              )}
-            </a>
-          </li>
-        ))
+        links.slice(1).map((l) => {
+          const active = isActive(l.href);
+          const activeColor = l.section === 'fun' ? '#a855f7' : '#22d3ee';
+          return (
+            <li>
+              <a
+                href={l.href}
+                aria-current={active ? 'page' : undefined}
+                style={`font-family: system-ui, -apple-system, sans-serif; font-size: 13px; font-weight: 500; text-decoration: none; transition: color 120ms; color: ${active ? activeColor : '#6b7280'};`}
+                onmouseover={`this.style.color='${active ? activeColor : '#9ca3af'}'`}
+                onmouseout={`this.style.color='${active ? activeColor : '#6b7280'}'`}
+              >
+                {l.label}
+              </a>
+            </li>
+          );
+        })
       }
     </ul>
 
-    <div class="flex items-center gap-1">
-      <ThemeToggle />
-      {/* Mobile menu button */}
-      <button
-        type="button"
-        id="nav-toggle"
-        class="inline-flex h-9 w-9 items-center justify-center rounded text-text-muted transition-colors hover:bg-surface-2 hover:text-text md:hidden"
-        aria-label="Open menu"
-        aria-expanded="false"
-        aria-controls="mobile-menu"
+    {/* Mobile hamburger */}
+    <button
+      type="button"
+      id="nav-toggle"
+      class="inline-flex items-center justify-center md:hidden"
+      style="width: 20px; height: 20px; background: none; border: none; cursor: pointer; padding: 0;"
+      aria-label="Open menu"
+      aria-expanded="false"
+      aria-controls="mobile-menu"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 20 20"
+        fill="#6b7280"
+        width="20"
+        height="20"
+        aria-hidden="true"
+        id="hamburger-icon"
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.75"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          class="h-5 w-5"
-          aria-hidden="true"
-        >
-          <path d="M3 6h18M3 12h18M3 18h18"></path>
-        </svg>
-      </button>
-    </div>
+        <rect y="3" width="20" height="2" rx="1"/>
+        <rect y="9" width="20" height="2" rx="1"/>
+        <rect y="15" width="20" height="2" rx="1"/>
+      </svg>
+    </button>
   </nav>
 
   {/* Mobile menu */}
-  <div id="mobile-menu" hidden class="border-t border-border/60 md:hidden">
-    <ul class="mx-auto flex max-w-5xl flex-col gap-1 px-6 py-3">
+  <div id="mobile-menu" hidden style="border-top: 1px solid rgba(255,255,255,0.06);">
+    <ul
+      class="mx-auto flex max-w-5xl flex-col"
+      style="gap: 4px; padding: 12px 20px; list-style: none; margin: 0;"
+    >
       {
-        links.slice(1).map((l) => (
-          <li>
-            <a
-              href={l.href}
-              aria-current={isActive(l.href) ? 'page' : undefined}
-              class:list={[
-                'block rounded px-3 py-2 text-sm transition-colors',
-                isActive(l.href)
-                  ? 'bg-surface-2 text-text'
-                  : 'text-text-muted hover:bg-surface-2 hover:text-text',
-              ]}
-            >
-              {l.label}
-            </a>
-          </li>
-        ))
+        links.slice(1).map((l) => {
+          const active = isActive(l.href);
+          const activeColor = l.section === 'fun' ? '#a855f7' : '#22d3ee';
+          return (
+            <li>
+              <a
+                href={l.href}
+                aria-current={active ? 'page' : undefined}
+                style={`display: block; padding: 8px 12px; font-size: 13px; font-weight: 500; text-decoration: none; border-radius: 6px; color: ${active ? activeColor : '#6b7280'};`}
+              >
+                {l.label}
+              </a>
+            </li>
+          );
+        })
       }
     </ul>
   </div>
