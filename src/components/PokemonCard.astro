@@ -88,7 +88,7 @@ const secondary = typeColors[types[1] ?? types[0]];
   .hex-face {
     /* The 2px inset reveals the colored border ring. */
     inset: 3px;
-    background-color: var(--surface);
+    background-color: var(--surface-solid);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -152,13 +152,13 @@ const secondary = typeColors[types[1] ?? types[0]];
      and doesn't crash into the pointy top/bottom. */
   .hex-reveal {
     inset: 3px; /* match .hex-face inset so it lines up with the border ring */
-    background-color: var(--surface);
+    background-color: var(--surface-solid);
     color: var(--text);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 22% 1rem;
+    padding: 14% 1rem;
     text-align: center;
     opacity: 0;
     transform: scale(0.97);
@@ -188,7 +188,7 @@ const secondary = typeColors[types[1] ?? types[0]];
     color: var(--text-muted);
     /* Clamp body to ~5 lines so longer entries don't overflow the hex. */
     display: -webkit-box;
-    -webkit-line-clamp: 5;
+    -webkit-line-clamp: 8;
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
