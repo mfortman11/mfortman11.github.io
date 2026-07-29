@@ -84,6 +84,8 @@ const nba = defineCollection({
   loader: file('src/data/nba.yml', { parser: yamlParser }),
   schema: z.object({
     name: z.string(),
+    // Primary position — feeds the position depth chart on the guide page.
+    position: z.enum(['PG', 'SG', 'SF', 'PF', 'C']),
     // My personal rank, 1–25.
     rank: z.number().int().min(1).max(25),
     // Where the broader basketball internet tends to put them. Optional so

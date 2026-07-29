@@ -15,6 +15,7 @@
 
 - id: lebron
   name: LeBron James
+  position: SF
   rank: 1
   consensusRank: 2
   era: 2000s–2020s
@@ -31,6 +32,7 @@
 
 - id: jordan
   name: Michael Jordan
+  position: SG
   rank: 2
   consensusRank: 1
   era: 1980s–1990s
@@ -49,6 +51,7 @@
 
 - id: kareem
   name: Kareem Abdul-Jabbar
+  position: C
   rank: 3
   consensusRank: 3
   era: 1970s–1980s
@@ -64,6 +67,7 @@
 
 - id: shaq
   name: Shaquille O'Neal
+  position: C
   rank: 4
   consensusRank: 6
   era: 1990s–2000s
@@ -80,6 +84,7 @@
 
 - id: duncan
   name: Tim Duncan
+  position: PF
   rank: 5
   consensusRank: 7
   era: 2000s–2010s
@@ -94,6 +99,7 @@
 
 - id: kobe
   name: Kobe Bryant
+  position: SG
   rank: 6
   consensusRank: 11
   era: 2000s–2010s
@@ -110,6 +116,7 @@
 
 - id: bird
   name: Larry Bird
+  position: SF
   rank: 7
   consensusRank: 8
   era: 1980s
@@ -125,6 +132,7 @@
 
 - id: magic
   name: Magic Johnson
+  position: PG
   rank: 8
   consensusRank: 4
   era: 1980s
@@ -140,6 +148,7 @@
 
 - id: russell
   name: Bill Russell
+  position: C
   rank: 9
   consensusRank: 5
   era: 1950s–1960s
@@ -154,6 +163,7 @@
 
 - id: curry
   name: Stephen Curry
+  position: PG
   rank: 10
   consensusRank: 10
   era: 2010s–2020s
@@ -169,6 +179,7 @@
 
 - id: hakeem
   name: Hakeem Olajuwon
+  position: C
   rank: 11
   consensusRank: 12
   era: 1980s–1990s
@@ -183,6 +194,7 @@
 
 - id: wilt
   name: Wilt Chamberlain
+  position: C
   rank: 12
   consensusRank: 9
   era: 1960s–1970s
@@ -197,6 +209,7 @@
 
 - id: durant
   name: Kevin Durant
+  position: SF
   rank: 13
   consensusRank: 13
   era: 2010s–2020s
@@ -211,6 +224,7 @@
 
 - id: jokic
   name: Nikola Jokić
+  position: C
   rank: 14
   consensusRank: 17
   era: 2010s–2020s
@@ -224,6 +238,7 @@
 
 - id: moses
   name: Moses Malone
+  position: C
   rank: 15
   consensusRank: 21
   era: 1970s–1980s
@@ -238,6 +253,7 @@
 
 - id: giannis
   name: Giannis Antetokounmpo
+  position: PF
   rank: 16
   consensusRank: 24
   era: 2010s–2020s
@@ -252,6 +268,7 @@
 
 - id: dirk
   name: Dirk Nowitzki
+  position: PF
   rank: 17
   consensusRank: 18
   era: 2000s–2010s
@@ -266,6 +283,7 @@
 
 - id: garnett
   name: Kevin Garnett
+  position: PF
   rank: 18
   consensusRank: 16
   era: 1990s–2010s
@@ -280,6 +298,7 @@
 
 - id: pippen
   name: Scottie Pippen
+  position: SF
   rank: 19
   consensusRank: 28
   era: 1980s–2000s
@@ -293,6 +312,7 @@
 
 - id: kawhi
   name: Kawhi Leonard
+  position: SF
   rank: 20
   consensusRank: 32
   era: 2010s–2020s
@@ -306,6 +326,7 @@
 
 - id: cp3
   name: Chris Paul
+  position: PG
   rank: 21
   consensusRank: 30
   era: 2000s–2020s
@@ -319,6 +340,7 @@
 
 - id: barkley
   name: Charles Barkley
+  position: PF
   rank: 22
   consensusRank: 25
   era: 1980s–1990s
@@ -332,6 +354,7 @@
 
 - id: oscar
   name: Oscar Robertson
+  position: PG
   rank: 23
   consensusRank: 14
   era: 1960s–1970s
@@ -345,6 +368,7 @@
 
 - id: jerry-west
   name: Jerry West
+  position: SG
   rank: 24
   consensusRank: 15
   era: 1960s–1970s
@@ -359,6 +383,7 @@
 
 - id: wade
   name: Dwyane Wade
+  position: SG
   rank: 25
   consensusRank: 23
   era: 2000s–2010s
