@@ -54,12 +54,12 @@
   blurb: >
     My favorite fossil Pokémon. That first anime appearance was unforgettable and he's always a treat to get your hands on in any Gen 1 run.
 
-- id: ceruledge
-  name: Ceruledge
-  dex: 936
-  types: [fire, ghost]
-  sprite: https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/937.png
-  role: Setup Sweeper
+- id: weezing-galar
+  name: Galarian Weezing
+  dex: 110
+  types: [poison, fairy]
+  sprite: https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10162.png
+  role: Defensive Pivot
   order: 6
   blurb: >
-    Some love for the newer gens. One of the coolest designs in years and he looks like he walked straight out of Mega Man. Heavily used in my Scarlet/Violet playthrough.
+    My daughter Eloise goes by Weezy, so this one was non-negotiable. I've always had a soft spot for poison types, and the Galarian fairy variant felt right for her. Neutralizing Gas is also just one of the most fun abilities in the game.
