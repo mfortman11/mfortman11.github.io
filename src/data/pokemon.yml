@@ -58,7 +58,7 @@
   name: Galarian Weezing
   dex: 110
   types: [poison, fairy]
-  sprite: https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10162.png
+  sprite: https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10167.png
   role: Defensive Pivot
   order: 6
   blurb: >
