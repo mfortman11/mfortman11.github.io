@@ -1,110 +1,452 @@
 ---
-import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Gradient from '../components/Gradient.astro';
-import ProjectCard from '../components/ProjectCard.astro';
-import { socials } from '../lib/socials';
+// import { Icon } from 'astro-icon/components'; // re-enable when highlights grid is uncommented
 
-const entries = await getCollection('work');
-const featured = entries
-  .filter((p) => p.data.featured)
-  .sort((a, b) => a.data.order - b.data.order || b.data.year - a.data.year)
-  .slice(0, 3);
+// ─────────────────────────────────────────────
+// EDIT ME — all page copy lives here
+// ─────────────────────────────────────────────
+const content = {
+  // <head> meta
+  seoTitle: 'Home',
+  seoDescription: 'Mike Fortman — full stack engineer building fast, accessible web UIs.',
+
+  // Hero
+  subtitle:  '// full stack engineer · dallas, tx',
+  name:      'Mike Fortman',
+  bio: [
+    '🧀 in Texas. Husband, Dad, and Full Stack engineer with a passion for frontend.',
+    'Fueled by a deep understanding of the customer and product, meaningful user reach, and precision and performance.',
+    'Currently building OpenRAG at IBM',
+  ],
+
+  // Education card
+  school:    'University of Wisconsin-Madison',
+  schoolSub: 'Madison, WI',
+  degrees:   ['B.S. Computer Science', 'B.S. Computer Engineering'],
+
+  // Stack card (icon names come from simple-icons / astro-icon)
+  stack: [
+    { name: 'React',      icon: 'simple-icons:react' },
+    { name: 'TypeScript', icon: 'simple-icons:typescript' },
+    { name: 'Next.js',    icon: 'simple-icons:nextdotjs' },
+    { name: 'Python',     icon: 'simple-icons:python' },
+    { name: 'Tailwind',   icon: 'simple-icons:tailwindcss' },
+    { name: 'GraphQL',    icon: 'simple-icons:graphql' },
+    { name: 'Docker',     icon: 'simple-icons:docker' },
+    { name: 'Astro',      icon: 'simple-icons:astro' },
+  ],
+
+  // Currently card
+  currently: [
+    'Building in AI/open-source',
+    'Developer tools and DX',
+    'Dad to Eloise (Weezy)',
+    'Ranking NBA players',
+  ],
+
+  // Values card
+  values: [
+    'Ship fast iterate faster',
+    'Accessibility matters',
+    'Open source > closed',
+    'Best code = deleted code',
+  ],
+
+  // Work path card
+  work: {
+    title: 'Professional Journey',
+    desc:  'School, IBM, and everything stop in between.',
+    // tags:  ['Frontend', 'AI/ML', 'Design Systems'],
+  },
+
+  // Fun path card
+  fun: {
+    title: 'Off the Clock',
+    desc:  'My NBA Mount Rushmore, Favorite Pokemon, etc the real way to get to know me.',
+    // tags:  ['Sports', 'Games', 'Open Source'],
+  },
+};
+// ─────────────────────────────────────────────
 ---
 
-<BaseLayout
-  title="Home"
-  description="Mike Fortman — frontend engineer building fast, accessible, design-token-driven web UIs."
->
-  {/* Hero */}
-  <section class="relative isolate overflow-hidden">
-    <Gradient class="h-[36rem]" />
-    <div class="mx-auto max-w-3xl px-6 pt-24 pb-20 sm:pt-32">
-      <p class="text-sm font-medium uppercase tracking-widest text-accent">Frontend Engineer</p>
-      <h1
-        class="mt-3 font-display text-5xl font-semibold tracking-tight text-text sm:text-6xl"
-        style="animation: var(--animate-fade-up);"
-      >
-        Mike Fortman
-      </h1>
-      <p
-        class="mt-5 max-w-xl text-lg text-text-muted"
-        style="animation: var(--animate-fade-up); animation-delay: 80ms;"
-      >
-        I build fast, accessible web UIs — currently most interested in design systems, data
-        visualization, and the small interactions that make a product feel cared about.
-      </p>
-      <div class="mt-8 flex flex-wrap items-center gap-3 text-sm">
-        {
-          socials.map((s) => (
-            <a
-              href={s.href}
-              class="rounded border border-border bg-surface px-3 py-1.5 text-text-muted transition-colors hover:border-accent/50 hover:text-text"
-              rel={s.href.startsWith('http') ? 'me noopener' : undefined}
-              target={s.href.startsWith('http') ? '_blank' : undefined}
-            >
-              {s.label}
-            </a>
-          ))
-        }
-        <a
-          href="/resume.pdf"
-          class="rounded border border-border bg-surface px-3 py-1.5 text-text-muted transition-colors hover:border-accent/50 hover:text-text"
-        >
-          Resume
-        </a>
+<BaseLayout title={content.seoTitle} description={content.seoDescription}>
+  {/* ── Hero ── */}
+  <section class="hero-section">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="hero-glow" aria-hidden="true"></div>
+    <div class="hero-inner">
+      <img src="/selfie.JPG" alt={content.name} class="hero-photo" />
+      <div class="hero-bio">
+        <p class="hero-subtitle">{content.subtitle}</p>
+        <h1 class="hero-name">{content.name}</h1>
+        <div class="hero-body">
+          {content.bio.map((p) => <p>{p}</p>)}
+        </div>
       </div>
     </div>
   </section>
 
-  {/* Selected work */}
-  <section class="mx-auto max-w-5xl px-6 py-16">
-    <div class="flex items-baseline justify-between">
-      <h2 class="font-display text-2xl font-semibold tracking-tight">Selected work</h2>
-      <a href="/work" class="text-sm text-text-muted transition-colors hover:text-accent">
-        See all →
-      </a>
-    </div>
-    {
-      featured.length > 0 ? (
-        <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {featured.map((p) => (
-            <ProjectCard project={p} />
-          ))}
-        </div>
-      ) : (
-        <p class="mt-6 text-sm text-text-muted">
-          Featured projects land here as soon as `featured: true` is set on entries under{' '}
-          <code class="font-mono text-xs">src/data/work.yml</code>.
-        </p>
-      )
-    }
-  </section>
+  {/* ── Highlights Grid — commented out ── */}
+  {/* <section class="highlights-section">
+    <div class="highlights-inner">
 
-  {/* Off the clock */}
-  <section class="mx-auto max-w-5xl px-6 py-16">
-    <h2 class="font-display text-2xl font-semibold tracking-tight">Off the clock</h2>
-    <div class="mt-6 grid gap-4 sm:grid-cols-2">
-      <a
-        href="/fun/pokemon"
-        class="group relative overflow-hidden rounded-lg border border-border bg-surface p-6 transition-all hover:-translate-y-0.5 hover:shadow"
-      >
-        <Gradient class="opacity-30" subtle />
-        <p class="text-xs font-medium uppercase tracking-widest text-accent">Fun</p>
-        <h3 class="mt-1 font-display text-xl font-semibold tracking-tight">
-          Ultimate Pokémon squad
-        </h3>
-        <p class="mt-2 text-sm text-text-muted">Six picks, with reasoning. Fight me.</p>
+      <div class="highlights-row">
+        <div class="card card-cyan">
+          <p class="card-label label-cyan">// education</p>
+          <div class="edu-header">
+            <div class="edu-logo-wrap">
+              <span class="edu-logo-icon" aria-hidden="true"><Icon name="wisconsin" /></span>
+            </div>
+            <div>
+              <p class="edu-school">{content.school}</p>
+              <p class="edu-sub">{content.schoolSub}</p>
+            </div>
+          </div>
+          <p class="edu-degrees">
+            {content.degrees.map((d, i) => <>{d}{i < content.degrees.length - 1 && <br />}</>)}
+          </p>
+        </div>
+
+        <div class="card card-cyan">
+          <p class="card-label label-cyan">// stack</p>
+          <div class="tags">
+            {content.stack.map((t) => (
+              <span class="tag tag-cyan">
+                <span class="tag-icon" aria-hidden="true"><Icon name={t.icon} /></span>
+                {t.name}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div class="highlights-row">
+        <div class="card card-purple">
+          <p class="card-label label-purple">// currently</p>
+          <ul class="bullet-list">
+            {content.currently.map((item) => (
+              <li><span class="bullet-purple">▸</span> {item}</li>
+            ))}
+          </ul>
+        </div>
+
+        <div class="card card-purple">
+          <p class="card-label label-purple">// values</p>
+          <ul class="bullet-list">
+            {content.values.map((item) => (
+              <li><span class="bullet-purple">▸</span> {item}</li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </section> */}
+
+  {/* ── Two Paths ── */}
+  <section class="paths-section">
+    <div class="paths-inner">
+
+      {/* Work */}
+      <a href="/experience" class="path-card path-card-cyan">
+        <div class="path-glow path-glow-cyan" aria-hidden="true"></div>
+        <!-- <p class="path-label label-cyan">~/work</p> -->
+        <h3 class="path-title">{content.work.title}</h3>
+        <p class="path-desc">{content.work.desc}</p>
+        <p class="path-cta label-cyan">cd ~/work →</p>
       </a>
-      <a
-        href="/fun/nba"
-        class="group relative overflow-hidden rounded-lg border border-border bg-surface p-6 transition-all hover:-translate-y-0.5 hover:shadow"
-      >
-        <Gradient class="opacity-30" subtle />
-        <p class="text-xs font-medium uppercase tracking-widest text-accent">Fun</p>
-        <h3 class="mt-1 font-display text-xl font-semibold tracking-tight">NBA top 25</h3>
-        <p class="mt-2 text-sm text-text-muted">Ranked vs. consensus. Receipts in the blurbs.</p>
+
+      {/* Fun */}
+      <a href="/fun" class="path-card path-card-purple">
+        <div class="path-glow path-glow-purple" aria-hidden="true"></div>
+        <!-- <p class="path-label label-purple">~/fun</p> -->
+        <h3 class="path-title">{content.fun.title}</h3>
+        <p class="path-desc">{content.fun.desc}</p>
+        <p class="path-cta label-purple">cd ~/fun →</p>
       </a>
+
     </div>
   </section>
 </BaseLayout>
+
+<style>
+  /* ── Hero ── */
+  .hero-section {
+    position: relative;
+    padding: 72px 48px 64px;
+    overflow: hidden;
+  }
+  .hero-grid-bg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+      linear-gradient(rgba(34, 211, 238, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(34, 211, 238, 0.03) 1px, transparent 1px);
+    background-size: 48px 48px;
+    z-index: 0;
+  }
+  .hero-glow {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 400px;
+    background: radial-gradient(ellipse at top, rgba(34, 211, 238, 0.06), transparent);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .hero-inner {
+    position: relative;
+    z-index: 1;
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    gap: 48px;
+    align-items: flex-start;
+  }
+  .hero-photo {
+    width: 240px;
+    height: 300px;
+    border-radius: 16px;
+    border: 2px solid rgba(34, 211, 238, 0.2);
+    box-shadow: 0 0 40px rgba(34, 211, 238, 0.08);
+    object-fit: cover;
+    object-position: 72% 15%;
+    flex-shrink: 0;
+  }
+  .hero-bio {
+    flex: 1;
+  }
+  .hero-subtitle {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 400;
+    color: #22d3ee;
+    letter-spacing: 0.04em;
+    margin: 0 0 12px;
+  }
+  .hero-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 48px;
+    font-weight: 700;
+    color: #f9fafb;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    margin: 0 0 20px;
+  }
+  .hero-body {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .hero-body p {
+    font-family: system-ui, -apple-system, sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    color: #9ca3af;
+    line-height: 1.7;
+    margin: 0;
+  }
+
+  /* ── Highlights Grid ── */
+  .highlights-section {
+    padding: 48px 48px 56px;
+  }
+  .highlights-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .highlights-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+
+  /* ── Cards ── */
+  .card {
+    padding: 22px;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 12px;
+  }
+  .card-cyan  { border: 1px solid rgba(34, 211, 238, 0.1); }
+  .card-purple { border: 1px solid rgba(168, 85, 247, 0.1); }
+
+  .card-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    margin: 0 0 10px;
+  }
+  .label-cyan   { color: #22d3ee; }
+  .label-purple { color: #a855f7; }
+
+  /* Education */
+  .edu-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+  .edu-logo-wrap {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .edu-logo-icon {
+    display: inline-flex;
+    width: 24px;
+    height: 24px;
+  }
+  .edu-logo-icon :global(svg) {
+    width: 100%;
+    height: 100%;
+  }
+  .edu-school {
+    font-size: 14px;
+    font-weight: 700;
+    color: #f3f4f6;
+    margin: 0;
+  }
+  .edu-sub {
+    font-size: 11px;
+    color: #6b7280;
+    margin: 0;
+  }
+  .edu-degrees {
+    font-size: 12px;
+    color: #9ca3af;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  /* Tags */
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    padding: 4px 8px;
+    border-radius: 5px;
+  }
+  .tag-cyan   { background: rgba(34, 211, 238, 0.06); border: 1px solid rgba(34, 211, 238, 0.1); color: #22d3ee; }
+  .tag-purple { background: rgba(168, 85, 247, 0.08); border: 1px solid rgba(168, 85, 247, 0.12); color: #a855f7; }
+  .tag-icon {
+    display: inline-flex;
+    width: 11px;
+    height: 11px;
+    flex-shrink: 0;
+  }
+  .tag-icon :global(svg) {
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Bullet lists */
+  .bullet-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .bullet-list li {
+    font-family: system-ui, -apple-system, sans-serif;
+    font-size: 12px;
+    color: #9ca3af;
+    line-height: 1.7;
+  }
+  .bullet-purple { color: #a855f7; }
+
+  /* ── Two Paths ── */
+  .paths-section {
+    padding: 0 48px 64px;
+  }
+  .paths-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    gap: 16px;
+  }
+  .path-card {
+    flex: 1;
+    padding: 28px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    transition: background 150ms;
+  }
+  .path-card:hover { background: rgba(255, 255, 255, 0.05); }
+  .path-card-cyan   { border: 1px solid rgba(34, 211, 238, 0.12); }
+  .path-card-purple { border: 1px solid rgba(168, 85, 247, 0.12); }
+
+  .path-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+  }
+  .path-glow-cyan   { background: linear-gradient(90deg, transparent, #22d3ee, transparent); }
+  .path-glow-purple { background: linear-gradient(90deg, transparent, #a855f7, transparent); }
+
+  .path-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    margin: 0 0 8px;
+  }
+  .path-title {
+    font-family: system-ui, -apple-system, sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: #f3f4f6;
+    margin: 0 0 10px;
+  }
+  .path-desc {
+    font-family: system-ui, -apple-system, sans-serif;
+    font-size: 14px;
+    color: #9ca3af;
+    line-height: 1.6;
+    margin: 0 0 20px;
+  }
+  .path-cta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 500;
+    margin: auto 0 0;
+  }
+
+  /* ── Mobile breakpoints ── */
+  @media (max-width: 640px) {
+    .hero-section  { padding: 48px 20px 0; }
+    .hero-inner    { flex-direction: column; align-items: center; gap: 24px; }
+    .hero-photo    { width: 200px; height: 250px; }
+    .hero-name     { font-size: 32px; }
+
+    .highlights-section { padding: 32px 20px 40px; }
+    .highlights-row     { grid-template-columns: 1fr; }
+
+    .paths-section { padding: 0 20px 48px; }
+    .paths-inner   { flex-direction: column; }
+  }
+</style>
