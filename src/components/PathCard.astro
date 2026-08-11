@@ -1,0 +1,83 @@
+---
+type Props = {
+  href: string;
+  title: string;
+  desc: string;
+  cta: string;
+  accent: 'cyan' | 'purple';
+};
+
+const { href, title, desc, cta, accent } = Astro.props;
+---
+
+<a href={href} class={`path-card path-card-${accent}`}>
+  <div class={`path-glow path-glow-${accent}`} aria-hidden="true"></div>
+  <h3 class="path-title">{title}</h3>
+  <p class="path-desc">{desc}</p>
+  <p class={`path-cta label-${accent}`}>{cta}</p>
+</a>
+
+<style>
+  .path-card {
+    flex: 1;
+    padding: 28px;
+    background: var(--surface-elevated);
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    transition: background 150ms;
+  }
+  .path-card:hover {
+    background: var(--surface-elevated);
+  }
+  .path-card-cyan {
+    border: 1px solid var(--accent-border);
+  }
+  .path-card-purple {
+    border: 1px solid var(--accent-2-border);
+  }
+
+  .path-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+  }
+  .path-glow-cyan {
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  }
+  .path-glow-purple {
+    background: linear-gradient(90deg, transparent, var(--accent-2), transparent);
+  }
+
+  .path-title {
+    font-family: system-ui, -apple-system, sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-card);
+    margin: 0 0 10px;
+  }
+  .path-desc {
+    font-family: system-ui, -apple-system, sans-serif;
+    font-size: 14px;
+    color: var(--text-body);
+    line-height: 1.6;
+    margin: 0 0 20px;
+  }
+  .path-cta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 500;
+    margin: auto 0 0;
+  }
+  .label-cyan {
+    color: var(--accent);
+  }
+  .label-purple {
+    color: var(--accent-2);
+  }
+</style>
