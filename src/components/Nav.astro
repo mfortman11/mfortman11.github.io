@@ -1,4 +1,6 @@
 ---
+import ThemeToggle from './ThemeToggle.astro';
+
 const links = [
   { href: '/',            label: 'Home',    section: 'pro' },
   { href: '/experience',  label: 'Work',    section: 'pro' },
@@ -12,7 +14,7 @@ const isActive = (href: string) => (href === '/' ? pathname === '/' : pathname.s
 
 <header
   class="sticky top-0 z-50"
-  style="background: rgba(10,10,15,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.06);"
+  style="background: var(--nav-bg); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border);"
 >
   <nav
     class="mx-auto flex items-center justify-between max-w-5xl"
@@ -21,7 +23,7 @@ const isActive = (href: string) => (href === '/' ? pathname === '/' : pathname.s
   >
     {/* Logo: mf_ */}
     <a href="/" class="font-mono text-base font-bold leading-none" style="text-decoration: none;">
-      <span style="color: #22d3ee;">mf</span><span style="color: #555;">_</span>
+      <span style="color: var(--accent);">mf</span><span style="color: var(--text-muted);">_</span>
     </a>
 
     {/* Desktop links */}
@@ -29,15 +31,15 @@ const isActive = (href: string) => (href === '/' ? pathname === '/' : pathname.s
       {
         links.map((l) => {
           const active = isActive(l.href);
-          const activeColor = l.section === 'fun' ? '#a855f7' : '#22d3ee';
+          const activeVar = l.section === 'fun' ? 'var(--accent-2)' : 'var(--accent)';
           return (
             <li>
               <a
                 href={l.href}
                 aria-current={active ? 'page' : undefined}
-                style={`font-family: system-ui, -apple-system, sans-serif; font-size: 13px; font-weight: 500; text-decoration: none; transition: color 120ms; color: ${active ? activeColor : '#6b7280'};`}
-                onmouseover={`this.style.color='${active ? activeColor : '#9ca3af'}'`}
-                onmouseout={`this.style.color='${active ? activeColor : '#6b7280'}'`}
+                style={`font-family: system-ui, -apple-system, sans-serif; font-size: 13px; font-weight: 500; text-decoration: none; transition: color 120ms; color: ${active ? activeVar : 'var(--text-muted)'};`}
+                onmouseover={`this.style.color='${active ? activeVar : 'var(--text-body)'}'`}
+                onmouseout={`this.style.color='${active ? activeVar : 'var(--text-muted)'}'`}
               >
                 {l.label}
               </a>
@@ -47,34 +49,42 @@ const isActive = (href: string) => (href === '/' ? pathname === '/' : pathname.s
       }
     </ul>
 
-    {/* Mobile hamburger */}
-    <button
-      type="button"
-      id="nav-toggle"
-      class="inline-flex items-center justify-center md:hidden"
-      style="width: 20px; height: 20px; background: none; border: none; cursor: pointer; padding: 0;"
-      aria-label="Open menu"
-      aria-expanded="false"
-      aria-controls="mobile-menu"
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 20 20"
-        fill="#6b7280"
-        width="20"
-        height="20"
-        aria-hidden="true"
-        id="hamburger-icon"
+    <div class="hidden items-center md:flex" style="gap: 4px;">
+      <ThemeToggle />
+    </div>
+
+    {/* Mobile controls */}
+    <div class="flex items-center md:hidden" style="gap: 8px;">
+      <ThemeToggle />
+      <button
+        type="button"
+        id="nav-toggle"
+        class="inline-flex items-center justify-center"
+        style="width: 20px; height: 20px; background: none; border: none; cursor: pointer; padding: 0;"
+        aria-label="Open menu"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
       >
-        <rect y="3" width="20" height="2" rx="1"/>
-        <rect y="9" width="20" height="2" rx="1"/>
-        <rect y="15" width="20" height="2" rx="1"/>
-      </svg>
-    </button>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+          style="color: var(--text-muted);"
+          width="20"
+          height="20"
+          aria-hidden="true"
+          id="hamburger-icon"
+        >
+          <rect y="3" width="20" height="2" rx="1"/>
+          <rect y="9" width="20" height="2" rx="1"/>
+          <rect y="15" width="20" height="2" rx="1"/>
+        </svg>
+      </button>
+    </div>
   </nav>
 
   {/* Mobile menu */}
-  <div id="mobile-menu" hidden style="border-top: 1px solid rgba(255,255,255,0.06);">
+  <div id="mobile-menu" hidden style="border-top: 1px solid var(--border);">
     <ul
       class="mx-auto flex max-w-5xl flex-col"
       style="gap: 4px; padding: 12px 20px; list-style: none; margin: 0;"
@@ -82,13 +92,13 @@ const isActive = (href: string) => (href === '/' ? pathname === '/' : pathname.s
       {
         links.map((l) => {
           const active = isActive(l.href);
-          const activeColor = l.section === 'fun' ? '#a855f7' : '#22d3ee';
+          const activeVar = l.section === 'fun' ? 'var(--accent-2)' : 'var(--accent)';
           return (
             <li>
               <a
                 href={l.href}
                 aria-current={active ? 'page' : undefined}
-                style={`display: block; padding: 8px 12px; font-size: 13px; font-weight: 500; text-decoration: none; border-radius: 6px; color: ${active ? activeColor : '#6b7280'};`}
+                style={`display: block; padding: 8px 12px; font-size: 13px; font-weight: 500; text-decoration: none; border-radius: 6px; color: ${active ? activeVar : 'var(--text-muted)'};`}
               >
                 {l.label}
               </a>

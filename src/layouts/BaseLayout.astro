@@ -38,6 +38,17 @@ const { title, description, image, canonical } = Astro.props;
 
     <SEO title={title} description={description} image={image} canonical={canonical} />
     <ClientRouter />
+
+    <script is:inline>
+      // Runs before paint to avoid a light/dark flash. Defaults to dark
+      // (the site's original look) unless the visitor has chosen light.
+      (function () {
+        var stored = localStorage.getItem('theme');
+        if (stored ? stored === 'dark' : true) {
+          document.documentElement.classList.add('dark');
+        }
+      })();
+    </script>
   </head>
   <body class="flex min-h-dvh flex-col bg-bg font-sans text-text antialiased">
     <Nav />
