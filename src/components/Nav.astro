@@ -31,15 +31,12 @@ const isActive = (href: string) => (href === '/' ? pathname === '/' : pathname.s
       {
         links.map((l) => {
           const active = isActive(l.href);
-          const activeVar = l.section === 'fun' ? 'var(--accent-2)' : 'var(--accent)';
           return (
             <li>
               <a
                 href={l.href}
                 aria-current={active ? 'page' : undefined}
-                style={`font-family: system-ui, -apple-system, sans-serif; font-size: 13px; font-weight: 500; text-decoration: none; transition: color 120ms; color: ${active ? activeVar : 'var(--text-muted)'};`}
-                onmouseover={`this.style.color='${active ? activeVar : 'var(--text-body)'}'`}
-                onmouseout={`this.style.color='${active ? activeVar : 'var(--text-muted)'}'`}
+                class={`nav-link ${l.section === 'fun' ? 'nav-link-fun' : ''} ${active ? 'nav-link-active' : ''}`}
               >
                 {l.label}
               </a>
@@ -92,13 +89,12 @@ const isActive = (href: string) => (href === '/' ? pathname === '/' : pathname.s
       {
         links.map((l) => {
           const active = isActive(l.href);
-          const activeVar = l.section === 'fun' ? 'var(--accent-2)' : 'var(--accent)';
           return (
             <li>
               <a
                 href={l.href}
                 aria-current={active ? 'page' : undefined}
-                style={`display: block; padding: 8px 12px; font-size: 13px; font-weight: 500; text-decoration: none; border-radius: 6px; color: ${active ? activeVar : 'var(--text-muted)'};`}
+                class={`nav-link nav-link-mobile ${l.section === 'fun' ? 'nav-link-fun' : ''} ${active ? 'nav-link-active' : ''}`}
               >
                 {l.label}
               </a>
@@ -109,6 +105,37 @@ const isActive = (href: string) => (href === '/' ? pathname === '/' : pathname.s
     </ul>
   </div>
 </header>
+
+<style>
+  .nav-link {
+    font-family: system-ui, -apple-system, sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: color 120ms;
+    color: var(--text-muted);
+  }
+  .nav-link:hover {
+    color: var(--text-body);
+  }
+  .nav-link-active {
+    color: var(--accent);
+  }
+  .nav-link-active:hover {
+    color: var(--accent);
+  }
+  .nav-link-fun.nav-link-active {
+    color: var(--accent-2);
+  }
+  .nav-link-fun.nav-link-active:hover {
+    color: var(--accent-2);
+  }
+  .nav-link-mobile {
+    display: block;
+    padding: 8px 12px;
+    border-radius: 6px;
+  }
+</style>
 
 <script>
   function bindNav() {

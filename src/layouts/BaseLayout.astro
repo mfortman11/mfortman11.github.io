@@ -47,6 +47,19 @@ const { title, description, image, canonical } = Astro.props;
         if (stored ? stored === 'dark' : true) {
           document.documentElement.classList.add('dark');
         }
+
+        // ClientRouter navigations swap in a freshly server-rendered
+        // document that never carries `.dark` (the server doesn't know
+        // localStorage), so without this the theme silently reverts to
+        // light on every in-app link click. Carry the live class forward
+        // before the swap applies.
+        if (!window.__themeSwapBound) {
+          window.__themeSwapBound = true;
+          document.addEventListener('astro:before-swap', function (event) {
+            var isDark = document.documentElement.classList.contains('dark');
+            event.newDocument.documentElement.classList.toggle('dark', isDark);
+          });
+        }
       })();
     </script>
   </head>
