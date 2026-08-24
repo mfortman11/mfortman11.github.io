@@ -8,7 +8,7 @@
   name: Nidoking
   dex: 34
   types: [poison, ground]
-  sprite: https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/34.png
+  sprite: ../assets/pokemon/nidoking.png
   role: Mixed Sweeper
   order: 1
   blurb: >
@@ -18,7 +18,7 @@
   name: Heracross
   dex: 214
   types: [bug, fighting]
-  sprite: https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/214.png
+  sprite: ../assets/pokemon/heracross.png
   role: Physical Wallbreaker
   order: 2
   blurb: >
@@ -28,7 +28,7 @@
   name: Starmie
   dex: 121
   types: [water, psychic]
-  sprite: https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/121.png
+  sprite: ../assets/pokemon/starmie.png
   role: Special Sweeper / Spinner
   order: 3
   blurb: >
@@ -38,7 +38,7 @@
   name: Hydreigon
   dex: 635
   types: [dark, dragon]
-  sprite: https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/635.png
+  sprite: ../assets/pokemon/hydreigon.png
   role: Special Sweeper
   order: 4
   blurb: >
@@ -48,7 +48,7 @@
   name: Aerodactyl
   dex: 142
   types: [rock, flying]
-  sprite: https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/142.png
+  sprite: ../assets/pokemon/aerodactyl.png
   role: Suicide Lead
   order: 5
   blurb: >
@@ -58,7 +58,7 @@
   name: Galarian Weezing
   dex: 110
   types: [poison, fairy]
-  sprite: https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10167.png
+  sprite: ../assets/pokemon/weezing-galar.png
   role: Defensive Pivot
   order: 6
   blurb: >

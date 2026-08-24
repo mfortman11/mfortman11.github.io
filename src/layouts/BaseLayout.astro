@@ -1,4 +1,10 @@
 ---
+// Self-hosted JetBrains Mono — latin subset, only the three weights the site
+// actually uses. Bundled into the CSS Astro already ships, so it costs no
+// extra third-party connection and no render-blocking request.
+import '@fontsource/jetbrains-mono/latin-400.css';
+import '@fontsource/jetbrains-mono/latin-500.css';
+import '@fontsource/jetbrains-mono/latin-700.css';
 import '../styles/global.css';
 import { ClientRouter } from 'astro:transitions';
 import Nav from '../components/Nav.astro';
@@ -22,20 +28,6 @@ const { title, description, image, canonical } = Astro.props;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
     <link rel="icon" type="image/svg+xml" href="/favicon-mf.svg" />
-    <link
-      rel="preconnect"
-      href="https://fonts.googleapis.com"
-    />
-    <link
-      rel="preconnect"
-      href="https://fonts.gstatic.com"
-      crossorigin=""
-    />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap"
-    />
-
     <SEO title={title} description={description} image={image} canonical={canonical} />
     <ClientRouter />
 
@@ -63,7 +55,7 @@ const { title, description, image, canonical } = Astro.props;
       })();
     </script>
   </head>
-  <body class="flex min-h-dvh flex-col bg-bg font-sans text-text antialiased">
+  <body class="bg-bg text-text flex min-h-dvh flex-col font-sans antialiased">
     <Nav />
     <main id="main" class="flex-1">
       <slot />
