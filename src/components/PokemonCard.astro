@@ -1,5 +1,6 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import { Image } from 'astro:assets';
 import { typeColors } from '../lib/typeColors';
 
 type Props = { entry: CollectionEntry<'pokemon'> };
@@ -17,15 +18,19 @@ const secondary = typeColors[types[1] ?? types[0]];
   aria-label={`${name} — hover or focus for details`}
   style={`--hex-bg: ${primary.bg}; --hex-bg-2: ${secondary.bg};`}
 >
-  {/* Two layers: outer clip = colored border; inner clip = surface fill.
-      The 2px gap between them shows the colored ring along every hex edge. */}
+  {
+    /* Two layers: outer clip = colored border; inner clip = surface fill.
+      The 2px gap between them shows the colored ring along every hex edge. */
+  }
   <div class="hex-border"></div>
   <div class="hex-face">
-    <img
+    <Image
       src={sprite}
       alt={`Official artwork of ${name}`}
-      width="160"
-      height="160"
+      width={160}
+      height={160}
+      densities={[1, 2]}
+      format="webp"
       loading="lazy"
       class="hex-sprite"
     />
@@ -40,16 +45,16 @@ const secondary = typeColors[types[1] ?? types[0]];
         {
           types.map((t) => {
             const c = typeColors[t];
-            return (
-              <li style={`background-color: ${c.bg}; color: ${c.fg};`}>{t}</li>
-            );
+            return <li style={`background-color: ${c.bg}; color: ${c.fg};`}>{t}</li>;
           })
         }
       </ul>
     </div>
   </div>
-  {/* Reveal: same hex clip, opacity-gated by hover/focus. Body markdown from
-      the .md file lands here — keep it short so it stays inside the hex. */}
+  {
+    /* Reveal: same hex clip, opacity-gated by hover/focus. Body markdown from
+      the .md file lands here — keep it short so it stays inside the hex. */
+  }
   <div class="hex-reveal">
     <p class="hex-reveal-name">{name}</p>
     <p class="hex-reveal-body">{blurb}</p>

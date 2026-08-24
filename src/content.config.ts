@@ -66,18 +66,20 @@ const pokemonType = z.enum([
 
 const pokemon = defineCollection({
   loader: file('src/data/pokemon.yml', { parser: yamlParser }),
-  schema: z.object({
-    name: z.string(),
-    dex: z.number().int().positive(),
-    types: z.array(pokemonType).min(1).max(2),
-    // Path under /public (e.g. "/pokemon/charizard.png") or remote URL.
-    sprite: z.string(),
-    role: z.string(),
-    // Squad position 1–6.
-    order: z.number().int().min(1).max(6),
-    // 1–2 sentences shown in the hex hover/focus reveal.
-    blurb: z.string(),
-  }),
+  schema: ({ image }) =>
+    z.object({
+      name: z.string(),
+      dex: z.number().int().positive(),
+      types: z.array(pokemonType).min(1).max(2),
+      // Local file under src/assets, path relative to this config. Routed
+      // through astro:assets so the 475px source ships as a resized WebP.
+      sprite: image(),
+      role: z.string(),
+      // Squad position 1–6.
+      order: z.number().int().min(1).max(6),
+      // 1–2 sentences shown in the hex hover/focus reveal.
+      blurb: z.string(),
+    }),
 });
 
 const nba = defineCollection({
